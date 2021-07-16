@@ -67,6 +67,7 @@ const packageRouter = require('./routes/package');
 const pendingRouter = require('./routes/pending');
 const notificationRouter = require('./routes/notification');
 const paymentRouter = require('./routes/payment');
+const offerRouter = require('./routes/offer');
 
 // send json to express application
 
@@ -94,7 +95,7 @@ app.use("/api/package",packageRouter);
 app.use("/api/pending", pendingRouter);
 app.use("/api/notification",notificationRouter);
 app.use("/api/payment", paymentRouter);
-
+app.use("/api/offer",offerRouter);
 
 //dummy function
 

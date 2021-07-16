@@ -4,27 +4,16 @@ const userRouter = express.Router();
 //middlewares
 const authenticate = require('../middlewares/authenticate');
 
-const ispController = require('../controllers/ispController');
-
-// const userDetailController = require('../controllers/userDetailController');
-
-// userRouter.post('/register',
-//     userDetailController.handlePOSTRegister
-// );
-
-// userRouter.post('/update',
-//     authenticate.handleAuthentication,
-//     userDetailController.handlePATCHUserDetail
-// );
-
-// userRouter.post('/admin/register',
-//     userController.handlePOSTAdminRegister
-// );
+const userController = require('../controllers/userController');
 
 
-userRouter.post('/insert',ispController.handleIspRegister);
 
-userRouter.get('/fetch',ispController.getIspData);
+userRouter.post('/insert',userController.handleUserInsertOne);
 
+userRouter.get('/fetch',userController.getUserData);
+
+userRouter.post('/login',authenticate.handleUserLogIn);
+userRouter.post('/logout',authenticate.handleUserAuthentication,userController.handleUserLogOut);
+userRouter.post('/logoutAll',authenticate.handleUserAuthentication,userController.handleUserLogOutAll)
 
 module.exports = userRouter;

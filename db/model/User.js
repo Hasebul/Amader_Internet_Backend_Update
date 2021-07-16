@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
+const bcrypt = require('bcryptjs');
+const moment = require('moment');
 
 
 var UserSchema  = new mongoose.Schema({
@@ -20,6 +25,14 @@ var UserSchema  = new mongoose.Schema({
         required : true,
         trim : true
     },
+    
+    ispId:{ // id menas isp name here ok 
+        type:String,
+        required:true,
+        trim:true,
+        minLength:1
+    },
+
     connection_establishment_date: {
         type: Date,
         default: new Date()
@@ -28,6 +41,15 @@ var UserSchema  = new mongoose.Schema({
         type : Boolean,
         default : false
     },
+    
+    balance:{
+        type:Number,
+        default:0
+    },
+
+
+
+
     tokens : [{
         access : {
             type : String,

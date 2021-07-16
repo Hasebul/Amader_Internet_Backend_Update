@@ -57,6 +57,40 @@ const fetchPackageData = async (req,res) => {
     }
 };
 
+
+
+const findPackageByQuery = async (query, option) => {
+    try {
+      
+        let data = await Package.find(query);
+       
+        if (data){
+            return {
+                data,
+                message: 'Package Found',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'Package Not Found',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+};
+
+
+
+
+
 // const deleteUser = async (username) => {
 //     try {
 //         let data = await User.findOneAndDelete({ username });
@@ -138,4 +172,5 @@ const fetchPackageData = async (req,res) => {
 module.exports = {
     insertPackage,
     fetchPackageData,
+    findPackageByQuery
 }

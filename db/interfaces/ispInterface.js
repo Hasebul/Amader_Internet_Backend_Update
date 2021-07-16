@@ -1,39 +1,20 @@
+const { ObjectID } = require('mongodb');
 const {ISP} = require('../model/ISP');
 
 const insertIsp = async (userObject) => {
     try {
-        // let ispList = await Isp.find();
-
-        // for (const isp of ispList) {
-        //     if (isp.id === userObject.id) {
-        //         return {
-        //             message: 'Id already exists please give new one',
-        //             status: "ERROR"
-        //         }
-        //     }
-
-        //     if (isp.Email === userObject.Email) {
-        //         return {
-        //             message: 'Email Already Exists',
-        //             status: "ERROR"
-        //         }
-        //     }
-        // }
-        console.log(ISP);
-        console.log(userObject);
-        let ispData = new ISP(userObject);//problem
-        console.log(ispData);
+       
+        let ispData = new ISP(userObject);
         let data = await ispData.save(); 
-        console.log(data);
         
         if (data.nInserted === 0){
             return {
-                message: 'User Insertion Failed',
+                message: 'ISP Insertion Failed',
                 status: "ERROR"
             }
         } else {
             return {
-                message: 'User Insertion Successful',
+                message: 'ISP Insertion Successful',
                 status: "OK"
             };
         }
@@ -54,13 +35,13 @@ const fetchIspData = async (req,res) => {
         if (data){
             return {
                 data,
-                message: 'User Found',
+                message: 'ISP Found',
                 status: 'OK'
             }
         } else {
             return {
                 data: null,
-                message: 'User Not Found',
+                message: 'ISP Not Found',
                 status: 'ERROR'
             };
         }
@@ -77,17 +58,11 @@ const fetchIspData = async (req,res) => {
 
 const getPackages= async ( preferences) => { //preferences 
     try {
-    //console.log(ISP);
-    console.log( preferences );
-    // let ispData = new ISP(userObject);//problem
-    //console.log(ispData);
-    //let data = await ispData.save(); 
-    //console.log(data);
     
-    //finding data base on preferences
-    //st1 . fetch data from packages 
-    //st2 . find on the criteria 
-    //send the data 
+    console.log( preferences );
+  
+    // this method need to update here we take a preferences and 
+    //fetch this package by query and send it to correspond response
 
 
     
@@ -109,6 +84,100 @@ const getPackages= async ( preferences) => { //preferences
     };
     }
 };
+
+
+
+
+const findIspByQuery = async (query, option) => {
+    try {
+      
+
+        let data = await ISP.findOne(query);
+       
+        if (data){
+            return {
+                data,
+                message: 'ISP Found',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'ISP Not Found',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+};
+
+
+
+
+const UpdateConnectionStatus = async (isp) => {
+    try {
+        const data = await ISP.updateOne({ name: isp.name }, { connection_status: 'true' , connection_establishment_time:new Date()});
+         
+        if (data.ok > 0){
+            return {
+                data,
+                message: 'ISP Found . Value update',
+                status: 'ok'
+            }
+        } else {
+            return {
+                message: 'Value not  Updated',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+};
+
+
+const findByIdAndUpdate = async (id, update)=>{
+
+    try {
+        let data = await ISP.findByIdAndUpdate(id, update);
+
+        if (data){
+            return {
+                data,
+                message: 'ISP Token Update Successful',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'ISP Token Update Failed',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+
+
+}
+
+
+
 
 
 
@@ -194,8 +263,11 @@ const getPackages= async ( preferences) => { //preferences
 
 module.exports = {
     insertIsp,
+    UpdateConnectionStatus,
     fetchIspData,
-    getPackages
+    getPackages,
+    findIspByQuery,
+    findByIdAndUpdate,
     //deleteUser,
     //findUserByQuery,
     //findUserByIDAndUpdate

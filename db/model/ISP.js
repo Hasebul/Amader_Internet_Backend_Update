@@ -37,6 +37,12 @@ var ISPSchema = new mongoose.Schema({
         type : Number,
         default : null,
     },
+    
+    balance:{
+        type:Number,
+        default:0
+    },
+
     tokens : [{
         access : {
             type : String,

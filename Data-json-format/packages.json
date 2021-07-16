@@ -1,0 +1,186 @@
+[{
+  "_id": {
+    "$oid": "60bcf3a2d7c0802290fef85d"
+  },
+  "ongoing": true,
+  "name": "ULTRA-PREMIUM",
+  "package_type": 0,
+  "bandwidth": 5,
+  "up_speed": 5,
+  "down_speed": 4,
+  "duration": 12,
+  "price": 80000,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60be5336da5a2c4dc06331ff"
+  },
+  "ongoing": true,
+  "name": "Ultar-Premium1",
+  "package_type": 0,
+  "bandwidth": 6,
+  "up_speed": 6,
+  "down_speed": 5,
+  "duration": 12,
+  "price": 82000,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60be5348da5a2c4dc0633200"
+  },
+  "ongoing": true,
+  "name": "Ultar-Premium2",
+  "package_type": 0,
+  "bandwidth": 8,
+  "up_speed": 8,
+  "down_speed": 7,
+  "duration": 12,
+  "price": 84000,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60be5350da5a2c4dc0633201"
+  },
+  "ongoing": true,
+  "name": "Ultar-Premium3",
+  "package_type": 0,
+  "bandwidth": 10,
+  "up_speed": 9,
+  "down_speed": 8,
+  "duration": 12,
+  "price": 86000,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60be5356da5a2c4dc0633202"
+  },
+  "ongoing": true,
+  "name": "Ultar-Premium4",
+  "package_type": 0,
+  "bandwidth": 12,
+  "up_speed": 12,
+  "down_speed": 10,
+  "duration": 12,
+  "price": 90000,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d91754"
+  },
+  "name": "Premium",
+  "package_type": 0,
+  "bandwidth": 5,
+  "up_speed": 5,
+  "down_speed": 4,
+  "duration": 3,
+  "price": 20000,
+  "ongoing ": "true"
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d91755"
+  },
+  "name": "Premium1",
+  "package_type": 0,
+  "bandwidth": 6,
+  "up_speed": 6,
+  "down_speed": 5,
+  "duration": 3,
+  "price": 22000,
+  "ongoing ": "true"
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d91756"
+  },
+  "name": "Premium3",
+  "package_type": 0,
+  "bandwidth": 8,
+  "up_speed": 8,
+  "down_speed": 7,
+  "duration": 3,
+  "price": 24000,
+  "ongoing ": "true"
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d91757"
+  },
+  "name": "Premium4",
+  "package_type": 0,
+  "bandwidth": 10,
+  "up_speed": 10,
+  "down_speed": 9,
+  "duration": 3,
+  "price": 25000,
+  "ongoing ": "true"
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d91758"
+  },
+  "name": "Premium5",
+  "package_type": 0,
+  "bandwidth": 12,
+  "up_speed": 12,
+  "down_speed": 10,
+  "duration": 3,
+  "price": 26000,
+  "ongoing ": "true"
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d91759"
+  },
+  "name": "Pro-Premium",
+  "package_type": 0,
+  "bandwidth": 5,
+  "up_speed": 5,
+  "down_speed": 4,
+  "duration": 6,
+  "price": 40000,
+  "ongoing ": "true"
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d9175a"
+  },
+  "name": "Pro-Premium1",
+  "package_type": 0,
+  "bandwidth": 6,
+  "up_speed": 6,
+  "down_speed": 5,
+  "duration": 6,
+  "price": 42000,
+  "ongoing ": "true"
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d9175b"
+  },
+  "name": "Pro-Premium3",
+  "package_type": 0,
+  "bandwidth": 8,
+  "up_speed": 8,
+  "down_speed": 7,
+  "duration": 6,
+  "price": 44000,
+  "ongoing ": "true"
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d9175c"
+  },
+  "name": "Pro-Premium4",
+  "package_type": 0,
+  "bandwidth": 10,
+  "up_speed": 10,
+  "down_speed": 9,
+  "duration": 6,
+  "price": 45000,
+  "ongoing ": "true"
+},{
+  "_id": {
+    "$oid": "60bf069accc2012d84d9175d"
+  },
+  "name": "Pro-Premium5",
+  "package_type": 0,
+  "bandwidth": 12,
+  "up_speed": 12,
+  "down_speed": 10,
+  "duration": 12,
+  "price": 46000,
+  "ongoing ": "true"
+}]

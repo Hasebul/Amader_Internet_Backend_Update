@@ -44,11 +44,23 @@ var PaymentSchema = new mongoose.Schema({
     transaction_id : {
         type : String,
         required : true
+    },
+    amount:{
+        type:Number,
+        required:true
+    },
+    method:{
+        type:String,
+        required:true
+    },
+    paymentDuration:{
+        type:Number,
+        required:true
     }
 
 });
 
 
-var Payment = mongoose.model('Contract', PaymentSchema);
+var Payment = mongoose.model('Payment', PaymentSchema);
 
 module.exports = {Payment};

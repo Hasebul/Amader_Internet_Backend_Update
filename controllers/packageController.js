@@ -52,9 +52,38 @@ const handlefetchPackages = async (req, res) => {
 }
 
 
+const handlefetchByQuery= async (req,res) => {
+try{
+    console.log(req.body);
+    var packageCreator= req.body.packageCreator;
+    let Packages = await packageInterface.findPackageByQuery ({packageCreator: packageCreator}, {username: 1, userType: 1});//can generate error
+    //let Packages = Data.data;
+    if (Packages.status === 'OK') {
+        //res.send(Packages);
+        delete Packages.status;
+        delete Packages.message;
+        return res.send(Packages) ;
+        
+    } else {
+        return res.status(400).send({
+            message: 'Could not find package',
+            error: Packages.message
+        });
+    }
+ } catch (e) {
+    return res.status(500).send({
+        message: 'ERROR in POST /api/package/fetchbyquery',
+        error: e.message
+    });
+ }
+
+}
+
+
 
 module.exports = {
 
     handleInsertPackage ,
-    handlefetchPackages
+    handlefetchPackages,
+    handlefetchByQuery,
 }

@@ -4,7 +4,7 @@ const nttnRouter = express.Router();
 //middlewares
 const authenticate = require('../middlewares/authenticate');
 
-const ispController = require('../controllers/ispController');
+const nttnController = require('../controllers/nttnController');
 
 // const userDetailController = require('../controllers/userDetailController');
 
@@ -22,9 +22,15 @@ const ispController = require('../controllers/ispController');
 // );
 
 
-nttnRouter.post('/insert',ispController.handleIspRegister);
+nttnRouter.post('/insert',nttnController.handleNttnInsertOne);
 
-nttnRouter.get('/fetch',ispController.getIspData);
+//nttnRouter.get('/fetch',ispController.getIspData);
+
+nttnRouter.post('/login',authenticate.handleNttnLogIn)
+nttnRouter.post('/logout',authenticate.handleNttnAuthentication,nttnController.handleNttnLogOut);
+nttnRouter.post('/logoutAll',authenticate.handleNttnAuthentication,nttnController.handleNttnLogOutAll)
+
+
 
 
 module.exports = nttnRouter;

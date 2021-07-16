@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 var PackageSchema = new mongoose.Schema({
-    name : {
+    name : { //must be unique and use as keyword 
         type : String,
         minlength : 1,
         trim : true,
@@ -12,6 +12,12 @@ var PackageSchema = new mongoose.Schema({
         type : Number,// 0- ISP package, 1 -User package
         required : true
     },
+    packageCreator:{
+        type:String,
+        required : true,
+        default :'Nttn',
+    },
+
     bandwidth : {
         type : Number,
         required : true
@@ -36,6 +42,28 @@ var PackageSchema = new mongoose.Schema({
         type : Boolean,
         required : true,
         default : true
+    },
+    isRealIp: {
+        type:Boolean,
+        required:true,
+    },
+    downTime:{
+        type:Number,
+        required:true
+    },
+    responseTime:{
+        type:Number,
+        required:true
+    },
+
+    offerId:{
+        type:Number,
+        required:true,
+        default:0
+    },
+    areas:{
+        type:Array,
+        required:true
     }
 })
 

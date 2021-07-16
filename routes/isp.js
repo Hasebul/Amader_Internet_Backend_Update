@@ -13,5 +13,10 @@ ispRouter.post('/preferPackages', ispController.handlefetchIspPackages ) ;// dor
 
 ispRouter.get('/fetch',ispController.getIspData);
 
+ispRouter.post('/login',authenticate.handleIspLogIn)
+ispRouter.post('/logout',authenticate.handleIspAuthentication,ispController.handleIspLogOut);
+ispRouter.post('/logoutAll',authenticate.handleIspAuthentication,ispController.handleIspLogOutAll)
+ispRouter.get('/updateConnectionStatus',authenticate.handleIspAuthentication,ispController.handleUpdateConnectionStatus)
+
 
 module.exports = ispRouter;
