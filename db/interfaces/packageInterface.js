@@ -89,88 +89,41 @@ const findPackageByQuery = async (query, option) => {
 
 
 
+const findByIdAndUpdate = async (id, update)=>{
+
+    try {
+        let data = await Package.findByIdAndUpdate(id, update);
+
+        if (data){
+            return {
+                data,
+                message: 'Package value Update Successful',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'Package value Update Failed',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
 
 
-// const deleteUser = async (username) => {
-//     try {
-//         let data = await User.findOneAndDelete({ username });
-
-//         if (data){
-//             return {
-//                 message: 'User Deletion Successful',
-//                 status: 'OK'
-//             }
-//         } else {
-//             return {
-//                 message: 'User Deletion Failed',
-//                 status: 'ERROR'
-//             };
-//         }
-//     } catch (e) {
-//         return {
-//             message: e.message,
-//             status: 'ERROR'
-//         };
-//     }
-// };
+}
 
 
-// const findUserByQuery = async (query, option) => {
-//     try {
-//         let data = await User.findOne(query, option);
-
-//         if (data){
-//             return {
-//                 data,
-//                 message: 'User Found',
-//                 status: 'OK'
-//             }
-//         } else {
-//             return {
-//                 data: null,
-//                 message: 'User Not Found',
-//                 status: 'ERROR'
-//             };
-//         }
-
-//     } catch (e) {
-//         return {
-//             data: null,
-//             message: e.message,
-//             status: 'ERROR'
-//         };
-//     }
-// };
-
-// const findUserByIDAndUpdate = async (id, update) => {
-//     try {
-//         let data = await User.findByIdAndUpdate(id, update);
-
-//         if (data){
-//             return {
-//                 data,
-//                 message: 'User Update Successful',
-//                 status: 'OK'
-//             }
-//         } else {
-//             return {
-//                 data: null,
-//                 message: 'User Update Failed',
-//                 status: 'ERROR'
-//             };
-//         }
-
-//     } catch (e) {
-//         return {
-//             data: null,
-//             message: e.message,
-//             status: 'ERROR'
-//         };
-//     }
-// };
 
 module.exports = {
     insertPackage,
     fetchPackageData,
-    findPackageByQuery
+    findPackageByQuery,
+    findByIdAndUpdate
 }

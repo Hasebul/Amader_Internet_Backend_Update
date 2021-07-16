@@ -9,7 +9,9 @@ const packageController = require('../controllers/packageController');
 
 packageRouter.post('/insert',packageController.handleInsertPackage);//packageController.
 packageRouter.get('/fetch',packageController.handlefetchPackages);
-packageRouter.get('/fetchByQuery',packageController.handlefetchByQuery);
+packageRouter.post('/fetchByQuery',packageController.handlefetchByQuery);
+packageRouter.post('/update',packageController.handleUpdatePackage);
+
 
 
 module.exports = packageRouter;
