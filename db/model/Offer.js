@@ -3,10 +3,7 @@ const mongoose = require('mongoose');
 
 var OfferSchema  = new mongoose.Schema({
 
-    Id:{
-        type:Number,
-        default:0
-    },
+   
     name:{
         type:String,
         required:true,
@@ -21,10 +18,15 @@ var OfferSchema  = new mongoose.Schema({
         required:true,
         default:new Date()
     },
+    expirationTime:{
+        type:Date,
+        required:true,
+    },
     duration:{
         type:Number,
         required:true
     },
+
     reducePrice:{
         type:Number,
         required:true

@@ -5,7 +5,13 @@ const insertOffer = async (userObject) => {
     try {
        
         let Data = new Offer(userObject);
+       // let data = await Data.save(); 
+        //var Id = Offer.aggregate([{ $max:"$Id" }])  ;
+       // console.log(Id);
         let data = await Data.save(); 
+
+
+
         
         if (data.nInserted === 0){
             return {

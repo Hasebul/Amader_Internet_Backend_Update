@@ -5,6 +5,7 @@ const handleOfferInsertOne = async (req, res) => {
         
         let Data = await offerInterface.insertOffer(req.body);
 
+
         if (Data.status === 'OK') {
             return res.status(201).send({
                 message: Data.message
@@ -32,9 +33,10 @@ const getOfferData =  async (req, res) => {
         let Data = await offerInterface.fetchOfferData(req,res);//change here
         
         if (Data.status === 'OK') {
-            res.send(Data);
+           // res.send(Data);
+          //  console.log(Data);
             return res.status(201).send({
-                message: Data.message
+                 Data
             });
         } else {
             return res.status(400).send({
