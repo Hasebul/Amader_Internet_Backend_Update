@@ -54,7 +54,7 @@ const handlefetchPackages = async (req, res) => {
 
 const handlefetchByQuery= async (req,res) => {
 try{
-    console.log(req.body);
+   // console.log(req.body);
     var packageCreator= req.body.packageCreator;
     let Packages = await packageInterface.findPackageByQuery ({packageCreator: packageCreator}, {username: 1, userType: 1});//can generate error
     //let Packages = Data.data;
