@@ -158,6 +158,41 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
 
 
 
+
+
+ const handleAddOffer= async (req, res) => {
+    try{
+     var pkgName = req.body.name;
+     var pkgCreator = req.body.packageCreator;
+     let Data = await packageInterface.findPackageByQuery ({name: pkgName , packageCreator : pkgCreator}, {username: 1, userType: 1});//can generate error (it can pass by id also can update that code)
+ 
+     let package = Data.data[0];//Data contains array of packages so here i need to find one
+     await packageInterface.findByIdAndUpdate(package._id, {
+         $set: {
+            offerId: req.body.offerId,
+         }
+     });
+      
+     
+     return res.status(200).send("Sucessfully Update add status ");
+     
+ 
+ } catch (e) {
+     return res.status(500).send({
+         message: "Catch ERROR(PackageController) api/package/addOffer ",
+         error: e.message
+     });
+ }
+ 
+ }
+
+
+
+
+
+
+
+
 //------------------------internal function for uses----------------------------------------------------------------
 
 ///-------sendUpdatePackageStatusTouser----------
@@ -224,4 +259,5 @@ module.exports = {
     handlefetchByQuery,
     handleUpdatePackage,
     handleUpdatePackageOngoingStatus,
+    handleAddOffer,
 }
