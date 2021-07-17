@@ -3,7 +3,12 @@ const notificationInterface = require('../db/interfaces/notificationInterface');
 const handleNotificationInsertOne = async (req, res) => {
     try {
         
-        console.log("inside  handleNotificationInsertOne");
+       // console.log("inside  handleNotificationInsertOne");
+
+
+        // write code for make notification data 
+
+
         let Data = await notificationInterface.insertData(req.body);//change here
 
         if (Data.status === 'OK') {
@@ -12,13 +17,13 @@ const handleNotificationInsertOne = async (req, res) => {
             });
         } else {
             return res.status(400).send({
-                message: 'Could not Insert User',
+                message: 'Could not Insert Notifications',
                 error: Data.message
             });
         }
     } catch (e) {
         return res.status(500).send({
-            message: 'ERROR in POST /api/Isp/insert',
+            message: 'catch ERROR(notificationController) in POST /api/notifications/insert',
             error: e.message
         });
     }

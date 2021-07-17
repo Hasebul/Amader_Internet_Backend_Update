@@ -3,29 +3,43 @@ const ObjectID = require('mongodb');
 const moment = require('moment');
 
 var NotificationSchema = new mongoose.Schema({
-    request_type : {
-        type : Number, // 0- ISP, 1- user, 2 - NTTN
-        required : true
+    
+    
+    senderId:{
+        type:string,
+        required:true,
     },
-    isp_id : {
-        type : {ObjectID},
-        default : null
+    
+    receiverID:{
+        type:string,
+        required:true
     },
-    user_id : {
-        type : {ObjectID},
-        default : null
+
+    senderType:{
+        type:Number, // 1->Nttn , 2->Isp , 3->User
+        required:true
     },
+    receiverType:{
+        type:Number, // 1->Nttn , 2->Isp , 3->User
+        required:true
+    },
+    subject:{ 
+        type:String, 
+        trim: true, 
+        required:true
+    },
+    
     details: {
         type : String,
         trim : true,
-        minlength : 1,
+        minlength : 5,
         required : true
     },
-    seen_status : {
+    seenStatus : {
         type : Boolean,
         default : false
     },
-    notification_arrival_time : {
+    notificationArrivalTime : {
         type : Date,
         default : new Date()
     }

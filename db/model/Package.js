@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 var PackageSchema = new mongoose.Schema({
     name : { //must be unique and use as keyword 
         type : String,
@@ -57,9 +56,9 @@ var PackageSchema = new mongoose.Schema({
     },
 
     offerId:{
-        type:Number,
+        type:{ObjectID},
         required:true,
-        default:0
+        default:null
     },
     areas:{
         type:Array,

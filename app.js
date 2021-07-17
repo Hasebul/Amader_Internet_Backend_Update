@@ -47,6 +47,8 @@ const _ = require('lodash');
 var {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose');
 
+
+//----if any problem then change it
 process.on('SIGTERM', async function () {
   console.error('SIGTERM called');
   await mongoose.disconnect();
@@ -54,7 +56,7 @@ process.on('SIGTERM', async function () {
   process.exit(0);
 });
 
-
+// -----------------------------------
 
 const port = process.env.PORT;
 

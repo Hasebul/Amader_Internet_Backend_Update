@@ -2,20 +2,20 @@ const {Notification}= require('../model/Notification');
 
 const insertData = async (Object) => {
     try {
-        console.log(Object);
+       // console.log(Object);
         let Data = new Notification(Object);//problem
-        console.log(Data);
+      //  console.log(Data);
         let data = await Data.save(); 
-        console.log(data);
+       // console.log(data);
         
         if (data.nInserted === 0){
             return {
-                message: 'User Insertion Failed',
+                message: 'Notifications Insertion Failed',
                 status: "ERROR"
             }
         } else {
             return {
-                message: 'User Insertion Successful',
+                message: 'Notification Insertion Successful',
                 status: "OK"
             };
         }
