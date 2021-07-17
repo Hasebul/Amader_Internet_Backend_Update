@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
-
+const ObjectId = mongoose.Types.ObjectId;
 
 var ISPSchema = new mongoose.Schema({
     name : {
@@ -18,6 +18,10 @@ var ISPSchema = new mongoose.Schema({
         minlength : 6,
         required : true,
         trim : true
+    },
+    package_id : {
+        type : String,
+        required : true
     },
     license_id : {
         type : String,

@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
+const ObjectId = mongoose.Types.ObjectId;
 
 
 var UserSchema  = new mongoose.Schema({
@@ -18,6 +19,10 @@ var UserSchema  = new mongoose.Schema({
         minlength : 6,
         required : true,
         trim : true
+    },
+    package_id : {
+        type : String,
+        required : true
     },
     nid : {
         type : String,
