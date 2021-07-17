@@ -1,4 +1,7 @@
 const packageInterface = require('../db/interfaces/packageInterface');
+const notificationInterface = require('../db/interfaces/notificationInterface');
+
+
 
 const handleInsertPackage = async (req, res) => {
     try {
@@ -132,13 +135,27 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
              ongoing: req.body.ongoing,
          }
      });
- 
-     return res.status(200).send("Sucessfully Update packages");
+      
+     //------code for insert notifications --------------------------------
+     
+
+     var notif = {
+        senderId:"Nttn",
+        receiverID:"KS",
+        senderType:1,
+        receiverType:2,
+        subject:"Package disabled"+pkgName,
+        details:pkgName+pkgCreator 
+    };
+     await notificationInterface.insertData(notif);//change here
+
+     
+     return res.status(200).send("Sucessfully Update packages Status");
      
  
  } catch (e) {
      return res.status(500).send({
-         message: "Catch ERROR(PackageController) api/package/update ",
+         message: "Catch ERROR(PackageController) api/package/updateStatus ",
          error: e.message
      });
  }

@@ -58,7 +58,7 @@ var PackageSchema = new mongoose.Schema({
     offerId:{
         type:String,
         required:true,
-        default:"0"
+        default:"-1"
         
     },
     areas:{
