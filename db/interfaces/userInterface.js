@@ -89,6 +89,38 @@ const findUserByQuery = async (query, option) => {
 
 
 
+const findAllUserByQuery = async (query, option) => {
+    try {
+      
+
+        let data = await User.find(query);
+       
+        if (data){
+            return {
+                data,
+                message: 'User Found',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'User Not Found',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+};
+
+
+
+
 
 
 const findByIdAndUpdate = async (id, update)=>{
@@ -133,5 +165,6 @@ module.exports = {
     fetchUserData,
     findUserByQuery,
     findByIdAndUpdate,
+    findAllUserByQuery,
    
 }

@@ -119,6 +119,36 @@ const findIspByQuery = async (query, option) => {
 
 
 
+const findAllIspByQuery = async (query, option) => {
+    try {
+      
+
+        let data = await ISP.find(query);
+       
+        if (data){
+            return {
+                data,
+                message: 'ISP Found',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'ISP Not Found',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+};
+
+
 
 const UpdateConnectionStatus = async (isp) => {
     try {
@@ -268,6 +298,7 @@ module.exports = {
     getPackages,
     findIspByQuery,
     findByIdAndUpdate,
+    findAllIspByQuery 
     //deleteUser,
     //findUserByQuery,
     //findUserByIDAndUpdate

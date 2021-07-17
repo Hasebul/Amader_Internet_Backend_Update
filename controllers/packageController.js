@@ -2,6 +2,7 @@ const packageInterface = require('../db/interfaces/packageInterface');
 const notificationInterface = require('../db/interfaces/notificationInterface');
 const ispInterface = require('../db/interfaces/ispInterface');
 const userInterface = require('../db/interfaces/userInterface');
+const { cond } = require('lodash');
 
 const handleInsertPackage = async (req, res) => {
     try {
@@ -137,7 +138,7 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
      });
       
      //------code for insert notifications --------------------------------
-     
+    // console.log(package);
      sendUpdatePackageStatusToUser(package,req.body.ongoing);
 
      
@@ -163,14 +164,17 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
 
 var sendUpdatePackageStatusToUser = async(package,status) => {
    
+   //console.log(package);
+   //console.log(status);
+
     var packageUser=null;
     var notif = {
         senderId:package.packageCreator,
         receiverID:"KS",
         senderType:1,
         receiverType:2,
-        subject:pkgName+"  Package ",
-        details:pkgName+"  package is  " 
+        subject:package.name+"  Package ",
+        details:package.name+"  package is  " 
     };
     
     if(status){ // check wheter it's true of false
@@ -186,21 +190,25 @@ var sendUpdatePackageStatusToUser = async(package,status) => {
     if(package.packageCreator==="Nttn"){ // nttn send notification to isp
              notif.senderType=1;
              notif.receiverType=2;
-             let dummyData = await ispInterface.findUserByQuery ({ package_id: package._id.toString()}, {username: 1, userType: 1});//can generate error
+             let dummyData = await ispInterface.findAllIspByQuery ({ package_id: package._id.toString()}, {username: 1, userType: 1});//can generate error
+            // console.log(dummyData);
              packageUser=  dummyData.data;
     }
     else{
         notif.senderType=2;
         notif.receiverType=3;
-        let dummyData = await userInterface.findUserByQuery ({ package_id: package._id.toString()}, {username: 1, userType: 1});//can generate error
+        let dummyData = await userInterface.findAllUserByQuery ({ package_id: package._id.toString()}, {username: 1, userType: 1});//can generate error
         packageUser=  dummyData.data;
 
     }
     
-    for(var user in packageUser){
-        notif.receiverID = user.name;
+    // console.log(packageUser);
+
+    for(var i in packageUser){
+       // console.log(packageUser[i].name);
+        notif.receiverID = packageUser[i].name;
         await notificationInterface.insertData(notif);//change here
-    }
+   }
    
 
 }
