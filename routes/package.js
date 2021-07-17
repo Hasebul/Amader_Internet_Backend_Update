@@ -11,7 +11,7 @@ packageRouter.post('/insert',packageController.handleInsertPackage);//packageCon
 packageRouter.get('/fetch',packageController.handlefetchPackages);
 packageRouter.post('/fetchByQuery',packageController.handlefetchByQuery);
 packageRouter.post('/update',packageController.handleUpdatePackage);
-
+packageRouter.post('/updateStatus',packageController.handleUpdatePackageOngoingStatus);
 
 
 module.exports = packageRouter;
