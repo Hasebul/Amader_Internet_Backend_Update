@@ -6,12 +6,12 @@ var NotificationSchema = new mongoose.Schema({
     
     
     senderId:{
-        type:string,
+        type:String,
         required:true,
     },
     
     receiverID:{
-        type:string,
+        type:String,
         required:true
     },
 

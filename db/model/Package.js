@@ -56,9 +56,10 @@ var PackageSchema = new mongoose.Schema({
     },
 
     offerId:{
-        type:{ObjectID},
+        type:String,
         required:true,
-        default:null
+        default:"0"
+        
     },
     areas:{
         type:Array,
