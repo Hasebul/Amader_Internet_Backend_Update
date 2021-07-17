@@ -27,7 +27,7 @@ var OfferSchema  = new mongoose.Schema({
         required:true
     },
 
-    reducePrice:{
+    reduction:{
         type:Number,
         required:true
     }
