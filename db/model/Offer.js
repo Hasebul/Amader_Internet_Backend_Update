@@ -22,11 +22,6 @@ var OfferSchema  = new mongoose.Schema({
         type:Date,
         required:true,
     },
-    duration:{
-        type:Number,
-        required:true
-    },
-
     reduction:{
         type:Number,
         required:true
