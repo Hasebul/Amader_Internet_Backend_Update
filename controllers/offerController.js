@@ -1,4 +1,5 @@
 const offerInterface = require('../db/interfaces/offerInterface');
+const packageInterface = require('../db/interfaces/packageInterface');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -137,13 +138,25 @@ var updateOfferStatusByExpirationDate= async() => {
         var Data = await offerInterface.findAllOfferByQuery({expirationTime:{$lt: new Date()}},{username:1});
         console.log(Data);
         var offers = Data.data;
-        console.log(offers)
+       // console.log(offers)
         for( var i in offers){
             var off  = offers[i];
             await offerInterface.findByIdAndUpdate({_id:off._id},{ 
                 $set:{
                     status:false,
                 }})
+            //find package whose offer id is this false offer id     
+            var pkgData = await packageInterface.findPackageByQuery({offerId:off._id.toString()},{username: 1});
+            var pkgs = pkgData.data;
+            for(var k in pkgs){
+                var pkg = pkgs[k];
+                await packageInterface.findByIdAndUpdate({_id:pkg._id},{
+                    $set:{
+                        offerId:"-1"
+                    }
+                })
+            }
+
 
         }
         // var update = await offerInterface.findByQueryAndUpdateAllMatch({expirationTime:{$lt: new Date()}},{ 
