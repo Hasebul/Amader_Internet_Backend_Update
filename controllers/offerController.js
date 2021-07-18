@@ -135,25 +135,14 @@ var updateOfferStatusByExpirationDate = async ()  =>{
       
      try{
        
-        //find all offer data
-        let Data = await offerInterface.fetchOfferData(req,res);//change here
-        var allOffers = Data.data;
-
-        //for each offer data updateOfferStatus
-        for (var i in allOffers){
-             var Offer = allOffers[i];
-             var check = Offer.expirationTime.getTime() < new Date().getTime();
-             console.log(check);
-             if(Offer.expirationTime.getTime() < new Date().getTime() ){
-
-             var updateVal = await offerInterface.findByIdAndUpdate({_id:Offer._id},{
-                 $set:{
-                     status:"false"
-                 }
-             })
+        var update = await offerInterface.findByQueryAndUpdateAllMatch({expirationTime:{$lt: new Date()}},{ 
+            $set:{
+                status:"false"
             }
+        });
 
-        }
+
+
 
      }catch(e){
          console.log("catch porblem inside updateOfferStatusByExpirationDate() ");

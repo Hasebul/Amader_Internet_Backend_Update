@@ -128,34 +128,34 @@ const findByIdAndUpdate = async (id, update)=>{
 
 
 
-// const findByQueryAndUpdateAllMatch = async (query, update) => {
+const findByQueryAndUpdateAllMatch = async (query, update) => {
   
-//     try {
-//         let data = await Offer.findAndModify({query:query,update: update});
+    try {
+        let data = await Offer.findOneAndUpdate(query,update);
 
-//         if (data){
-//             return {
-//                 data,
-//                 message: 'Offer  Update Successful',
-//                 status: 'OK'
-//             }
-//         } else {
-//             return {
-//                 data: null,
-//                 message: 'Offer  Update Failed',
-//                 status: 'ERROR'
-//             };
-//         }
+        if (data){
+            return {
+                data,
+                message: 'Offer  Update Successful',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'Offer  Update Failed',
+                status: 'ERROR'
+            };
+        }
 
-//     } catch (e) {
-//         return {
-//             data: null,
-//             message: e.message,
-//             status: 'ERROR'
-//         };
-//     }
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
 
-// }
+}
 
 
 
@@ -198,6 +198,6 @@ module.exports = {
     findOfferByQuery,
     findByIdAndUpdate,
     findAllOfferByQuery,
-  //  findByQueryAndUpdateAllMatch
+    findByQueryAndUpdateAllMatch
     
 }
