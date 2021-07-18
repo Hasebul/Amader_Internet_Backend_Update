@@ -1,4 +1,6 @@
 const notificationInterface = require('../db/interfaces/notificationInterface');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const handleNotificationInsertOne = async (req, res) => {
     try {
