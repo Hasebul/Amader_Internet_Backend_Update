@@ -130,16 +130,26 @@ try{
 //helper function 
 
 
-var updateOfferStatusByExpirationDate = async ()  =>{
-
-      
+function updateOfferStatusByExpirationDate (){
      try{
-       
-        var update = await offerInterface.findByQueryAndUpdateAllMatch({expirationTime:{$lt: new Date()}},{ 
-            $set:{
-                status:"false"
-            }
-        });
+
+        //find all packages 
+        var Data =  offerInterface.findAllOfferByQuery({expirationTime:{$lt: new Date()}},{username:1});
+        var offers = Data.data;
+        console.log(offer)
+        for( var i in offers){
+            var off  = offers[i];
+            offerInterface.findByIdAndUpdate({_id:off._id},{ 
+                $set:{
+                    status:false,
+                }})
+
+        }
+        // var update = await offerInterface.findByQueryAndUpdateAllMatch({expirationTime:{$lt: new Date()}},{ 
+        //     $set:{
+        //         status:"false"
+        //     }
+        // });
 
 
 
