@@ -104,11 +104,11 @@ try{
              //res.send(Packages);
              delete offers.status;
              delete offers.message;
-             return res.send(offers) ;
+             return res.status(200).send(offers) ;
              
          } else {
              return res.status(400).send({
-                 message: 'Could not find package',
+                 message: 'Could not find offers',
                  error: offers.message
              });
          }
