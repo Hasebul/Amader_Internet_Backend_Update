@@ -59,7 +59,7 @@ const getOfferData =  async (req, res) => {
    
     
 try{
-    // console.log(req.body);
+    
      var id= ObjectId(req.body.id); // convert into object id 
      let offer = await offerInterface.findOfferByQuery ({_id : id}, {username: 1, userType: 1});//can generate error
      //let Packages = Data.data;
