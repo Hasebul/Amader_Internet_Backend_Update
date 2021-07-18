@@ -130,16 +130,17 @@ try{
 //helper function 
 
 
-function updateOfferStatusByExpirationDate (){
+var updateOfferStatusByExpirationDate= async() => {
      try{
 
         //find all packages 
-        var Data =  offerInterface.findAllOfferByQuery({expirationTime:{$lt: new Date()}},{username:1});
+        var Data = await offerInterface.findAllOfferByQuery({expirationTime:{$lt: new Date()}},{username:1});
+        console.log(Data);
         var offers = Data.data;
-        console.log(offer)
+        console.log(offers)
         for( var i in offers){
             var off  = offers[i];
-            offerInterface.findByIdAndUpdate({_id:off._id},{ 
+            await offerInterface.findByIdAndUpdate({_id:off._id},{ 
                 $set:{
                     status:false,
                 }})
