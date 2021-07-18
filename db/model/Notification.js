@@ -42,6 +42,10 @@ var NotificationSchema = new mongoose.Schema({
     notificationArrivalTime : {
         type : Date,
         default : new Date()
+    },
+    category:{
+        type:String, 
+        defult:"empty"
     }
 });
 

@@ -77,8 +77,39 @@ const handleRandom = async (req, res) => {
 }
 
 
+
+
+const handlefetchByQuery= async (req,res) => {
+    try{
+       // console.log(req.body);
+        var rId= req.body.receiverID;
+        var rType=req.body.receiverType;
+        let notifs = await notificationInterface.findNotificationByQuery ({receiverID:rId,receiverType:rType});//can generate error
+        //let Packages = Data.data;
+        if (notifs.status === 'OK') {
+            //res.send(Packages);
+            delete notifs.status;
+            delete notifs.message;
+            return res.status(200).send(notifs) ;
+            
+        } else {
+            return res.status(400).send({
+                message: 'Could not find Notifications',
+                error: notifs.message
+            });
+        }
+     } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/notification/fetchbyquery',
+            error: e.message
+        });
+     }
+    
+    }
+
 module.exports = {
     handleNotificationInsertOne ,
     handlefetchNotificationData,
     handleRandom,
+    handlefetchByQuery,
 }

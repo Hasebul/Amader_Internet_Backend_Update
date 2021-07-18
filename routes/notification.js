@@ -12,5 +12,6 @@ notificationRouter.post('/insert',notificationController.handleNotificationInser
 notificationRouter.get('/fetch', notificationController.handlefetchNotificationData);//ispController.handleRequest ) ;// dorkar nai eta
 
 notificationRouter.get('/random', notificationController.handleRandom);
+notificationRouter.post('/fetchByQuery',notificationController.handlefetchByQuery);
 
 module.exports = notificationRouter ;

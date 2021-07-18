@@ -58,7 +58,41 @@ const fetchData = async (req,res) => {
 };
 
 
+
+
+const findNotificationByQuery = async (query) => {
+    try {
+      
+        let data = await Notification.find(query);
+       
+        if (data){
+            return {
+                data,
+                message: 'Notification Found',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'Notification Not Found',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+};
+
+
+
+
 module.exports = {
     insertData,
-    fetchData
+    fetchData,
+    findNotificationByQuery
 }
