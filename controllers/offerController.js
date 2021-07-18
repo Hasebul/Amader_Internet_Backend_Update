@@ -1,4 +1,7 @@
 const offerInterface = require('../db/interfaces/offerInterface');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 
 const handleOfferInsertOne = async (req, res) => {
     try {
@@ -52,11 +55,39 @@ const getOfferData =  async (req, res) => {
     }
 }
 
+ const handleFetchById = async (req, res) => {
+   
+    
+try{
+    // console.log(req.body);
+     var id= ObjectId(req.body.id); // convert into object id 
+     let offer = await offerInterface.findOfferByQuery ({_id : id}, {username: 1, userType: 1});//can generate error
+     //let Packages = Data.data;
+     if (offer.status === 'OK') {
+         //res.send(Packages);
+         delete offer.status;
+         delete offer.message;
+         return res.send(offer) ;
+         
+     } else {
+         return res.status(400).send({
+             message: 'Could not find offer',
+             error: offer.message
+         });
+     }
+  } catch (e) {
+     return res.status(500).send({
+         message: 'ERROR in POST /api/offer/fetchbyquery',
+         error: e.message
+     });
+  }
+ 
 
 
-
+ }
 
 module.exports = {
     getOfferData,
     handleOfferInsertOne ,
+    handleFetchById,
 }

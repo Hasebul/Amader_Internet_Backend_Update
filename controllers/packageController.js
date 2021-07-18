@@ -174,7 +174,7 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
      });
       
      
-     return res.status(200).send("Sucessfully Update add status ");
+     return res.status(200).send("Sucessfully Update offer");
      
  
  } catch (e) {
