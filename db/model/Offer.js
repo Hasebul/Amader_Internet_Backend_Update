@@ -25,7 +25,12 @@ var OfferSchema  = new mongoose.Schema({
     reduction:{
         type:Number,
         required:true
+    },
+    creator:{
+        type:String,
+        required:true
     }
+
 })
 
 

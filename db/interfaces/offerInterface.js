@@ -128,7 +128,66 @@ const findByIdAndUpdate = async (id, update)=>{
 
 
 
+// const findByQueryAndUpdateAllMatch = async (query, update) => {
+  
+//     try {
+//         let data = await Offer.findAndModify({query:query,update: update});
 
+//         if (data){
+//             return {
+//                 data,
+//                 message: 'Offer  Update Successful',
+//                 status: 'OK'
+//             }
+//         } else {
+//             return {
+//                 data: null,
+//                 message: 'Offer  Update Failed',
+//                 status: 'ERROR'
+//             };
+//         }
+
+//     } catch (e) {
+//         return {
+//             data: null,
+//             message: e.message,
+//             status: 'ERROR'
+//         };
+//     }
+
+// }
+
+
+
+
+const findAllOfferByQuery = async (query, option) => {
+    try {
+      
+
+        let data = await Offer.find(query);
+       
+        if (data){
+            return {
+                data,
+                message: 'ISP Found',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'ISP Not Found',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+};
 
 
 
@@ -138,5 +197,7 @@ module.exports = {
     fetchOfferData,
     findOfferByQuery,
     findByIdAndUpdate,
+    findAllOfferByQuery,
+  //  findByQueryAndUpdateAllMatch
     
 }

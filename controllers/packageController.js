@@ -140,10 +140,6 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
      //------code for insert notifications --------------------------------
     // console.log(package);
      sendUpdatePackageStatusToUser(package,req.body.ongoing);
-
-     
-
-     
      return res.status(200).send("Sucessfully Update packages Status");
      
  

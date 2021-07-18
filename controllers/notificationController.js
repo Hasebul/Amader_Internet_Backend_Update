@@ -59,8 +59,26 @@ const handlefetchNotificationData = async (req, res) => {
     }
 }
 
+const handleRandom = async (req, res) => {
+  
+    try {
+        
+        const random = Math.floor(Math.random() * 5) % 5 ;
+         
+        return res.status(200).send({Random:random });
+        
+    } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/notifications/Random ',
+            error: e.message
+        });
+    }
+
+}
+
 
 module.exports = {
     handleNotificationInsertOne ,
-    handlefetchNotificationData
+    handlefetchNotificationData,
+    handleRandom,
 }

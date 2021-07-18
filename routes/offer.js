@@ -11,7 +11,10 @@ offerRouter.post('/insert',offerController.handleOfferInsertOne);//ispController
 
 
 offerRouter.get('/fetch',offerController.getOfferData);
+
 offerRouter.post('/fetchById',offerController.handleFetchById);
+
+offerRouter.post('/fetchByQuery',offerController.handleOfferFetchByQuery);
 
 
 module.exports = offerRouter;

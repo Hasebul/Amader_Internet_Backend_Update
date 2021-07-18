@@ -86,8 +86,89 @@ try{
 
  }
 
+
+ const handleOfferFetchByQuery= async (req, res) => {
+
+    try{
+        // console.log(req.body);
+
+        //---checking wheather offer is expire it's expiration time then set offer status false
+
+        updateOfferStatusByExpirationDate();
+
+
+         var creator= req.body.creator;
+         let offers = await offerInterface.findAllOfferByQuery ({creator: creator}, {username: 1, userType: 1});//can generate error
+         //let Packages = Data.data;
+         if (offers.status === 'OK') {
+             //res.send(Packages);
+             delete offers.status;
+             delete offers.message;
+             return res.send(offers) ;
+             
+         } else {
+             return res.status(400).send({
+                 message: 'Could not find package',
+                 error: offers.message
+             });
+         }
+      } catch (e) {
+         return res.status(500).send({
+             message: 'ERROR in POST /api/offer/fetchbyquery',
+             error: e.message
+         });
+      }
+     
+
+
+ }
+
+
+
+
+
+//helper function 
+
+
+var updateOfferStatusByExpirationDate = async ()  =>{
+
+      
+     try{
+       
+        //find all offer data
+        let Data = await offerInterface.fetchOfferData(req,res);//change here
+        var allOffers = Data.data;
+
+        //for each offer data updateOfferStatus
+        for (var i in allOffers){
+             var Offer = allOffers[i];
+             var check = Offer.expirationTime.getTime() < new Date().getTime();
+             console.log(check);
+             if(Offer.expirationTime.getTime() < new Date().getTime() ){
+
+             var updateVal = await offerInterface.findByIdAndUpdate({_id:Offer._id},{
+                 $set:{
+                     status:"false"
+                 }
+             })
+            }
+
+        }
+
+     }catch(e){
+         console.log("catch porblem inside updateOfferStatusByExpirationDate() ");
+     }
+
+
+}
+
+
+
+
+
 module.exports = {
     getOfferData,
     handleOfferInsertOne ,
     handleFetchById,
+    handleOfferFetchByQuery,
 }
