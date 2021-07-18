@@ -13,5 +13,6 @@ notificationRouter.get('/fetch', notificationController.handlefetchNotificationD
 
 notificationRouter.get('/random', notificationController.handleRandom);
 notificationRouter.post('/fetchByQuery',notificationController.handlefetchByQuery);
+notificationRouter.post('/updateSeenStatus',notificationController.handleUpdateNotificationSeenStatus);
 
 module.exports = notificationRouter ;

@@ -107,9 +107,40 @@ const handlefetchByQuery= async (req,res) => {
     
     }
 
+
+
+
+
+ const handleUpdateNotificationSeenStatus= async (req, res) => {
+        try{
+            var id= ObjectId(req.body.id); // convert into object id 
+            //let Data = await notificationInterface.findNotificationByQuery({_id : id});//can generate error
+           
+            //let package = Data.data[0];//Data contains array of packages so here i need to find one
+            await notificationInterface.findByIdAndUpdate(id, {
+             $set: {
+                 seenStatus:true,
+                }
+            });
+          
+            return res.status(200).send("Sucessfully Update  SeenStatus");
+         
+     
+     } catch (e) {
+         return res.status(500).send({
+             message: "Catch ERROR(notificationController) api/notification/updateSeenStatus ",
+             error: e.message
+         });
+     }
+     
+     }
+    
+
+
 module.exports = {
     handleNotificationInsertOne ,
     handlefetchNotificationData,
     handleRandom,
     handlefetchByQuery,
+    handleUpdateNotificationSeenStatus,
 }

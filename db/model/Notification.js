@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ObjectID = require('mongodb');
+const ObjectId = mongoose.Types.ObjectId;
 const moment = require('moment');
 
 var NotificationSchema = new mongoose.Schema({

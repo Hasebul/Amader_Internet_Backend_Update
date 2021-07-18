@@ -91,8 +91,41 @@ const findNotificationByQuery = async (query) => {
 
 
 
+const findByIdAndUpdate = async (id, update)=>{
+
+    try {
+        let data = await Notification.findByIdAndUpdate(id, update);
+
+        if (data){
+            return {
+                data,
+                message: 'NOtification value Update Successful',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'Notifications value Update Failed',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+
+
+}
+
+
+
 module.exports = {
     insertData,
     fetchData,
-    findNotificationByQuery
+    findNotificationByQuery,
+    findByIdAndUpdate,
 }
