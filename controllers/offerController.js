@@ -135,7 +135,9 @@ var updateOfferStatusByExpirationDate= async() => {
      try{
 
         //find all packages 
-        var Data = await offerInterface.findAllOfferByQuery({expirationTime:{$lt: new Date()}},{username:1});
+        let today = new Date();
+        today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+        var Data = await offerInterface.findAllOfferByQuery({expirationTime:{$lt: today}},{username:1});
         console.log(Data);
         var offers = Data.data;
        // console.log(offers)

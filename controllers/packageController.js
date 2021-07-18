@@ -215,11 +215,11 @@ var sendUpdatePackageStatusToUser = async(package,status) => {
     
     if(status){ // check wheter it's true of false
         notif.subject=notif.subject+" Enable again ";
-        notif.details=notif.details+" enable agin. You can now Bye this package again";
+        notif.details=notif.details+" enable again. You can now Bye this package again";
     }
     else{
         notif.subject=notif.subject+" Disable again ";
-        notif.details=notif.details+" Disable agin. You can't Bye this package anymore";
+        notif.details=notif.details+" Disable again. You can't Bye this package anymore";
      }
 
 
