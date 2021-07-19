@@ -2,11 +2,11 @@ const {Payment}= require('../model/Payment');
 
 const insertData = async (Object) => {
     try {
-        console.log(Object);
+        //console.log(Object);
         let Data = new Payment(Object);//problem
-        console.log(Data);
+        //console.log(Data);
         let data = await Data.save(); 
-        console.log(data);
+        //console.log(data);
         
         if (data.nInserted === 0){
             return {

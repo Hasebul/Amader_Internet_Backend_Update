@@ -19,15 +19,15 @@ var PaymentSchema = new mongoose.Schema({
         type : {ObjectID},
         default : null
     },
-    union_id : {
-        type : Number,
-        default : null,
-        required : true
-    },
-    area_id : {
-        type : {ObjectID},
-        default : null
-    },
+    // union_id : {
+    //     type : Number,
+    //     default : null,
+    //     required : true
+    // },
+    // area_id : {
+    //     type : {ObjectID},
+    //     default : null
+    // },
     payment_status : {
         type : Boolean,
         default : false,
@@ -58,10 +58,7 @@ var PaymentSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
-    isAlreadyWarn:{
-        type:Boolean,
-        default:false
-    }
+   
 
 });
 
