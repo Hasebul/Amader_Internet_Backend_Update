@@ -187,8 +187,12 @@ var systemPushNotification = async () => {
         allPayment=allPayment.data;
         for(let p in allPayment){
               let pmt = allPayment[p];
+              console.log(pmt.paymentDuration);
               let tl=new Date();
-              tl.setMonth(tl.getDate()-pmt.paymentDuration);
+              tl.setMonth(tl.getMonth()-pmt.paymentDuration);
+              console.log(tl);
+              console.log(pmt.payment_time);
+
               if(tl>pmt.payment_time){
                     //update_payment_status_false
                     await paymentInterface.findByIdAndUpdate({_id:pmt._id},{
