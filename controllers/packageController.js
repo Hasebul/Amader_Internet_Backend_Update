@@ -162,7 +162,7 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
  const handleAddOffer= async (req, res) => {
     try{
 
-    
+ 
     
      var pkgName = req.body.name;
      var pkgCreator = req.body.packageCreator;
@@ -171,6 +171,10 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
      let package = Data.data[0];//Data contains array of packages so here i need to find one
      //console.log(package);
      //console.log(req.body.offerId);
+     if(req.body.offerId !== "-1" ){
+        sendAddOfferNotificationToUser(package,req.body.offerId);
+   } 
+
      await packageInterface.findByIdAndUpdate(package._id, {
          $set: {
             offerId: req.body.offerId,
@@ -180,12 +184,8 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
      
      // if offer id is not -1 then send notification to all isp 
      
-     if(req.body.offerId !== "-1" ){
-          sendAddOfferNotificationToUser(package);
-         
-     }
-     return res.status(200).send("Sucessfully Update offer");
-     
+   
+     return res.status(200).send("Sucessfully Update offer");   
  
  } catch (e) {
      return res.status(500).send({
@@ -261,14 +261,14 @@ var sendUpdatePackageStatusToUser = async(package,status) => {
 
 
 
-var sendAddOfferNotificationToUser = async(package) => {
+var sendAddOfferNotificationToUser = async(package,offerId) => {
    
     //console.log(package);
     //console.log(status);
      
     //get_offer_by_offer_id
 
-     let oid=ObjectId(package.offerId);
+     let oid=ObjectId(offerId);
      let offerData = await offerInterface.findOfferByQuery({_id:oid},true);
      let offer =offerData.data; 
 
@@ -306,7 +306,9 @@ var sendAddOfferNotificationToUser = async(package) => {
          notif.receiverID = packageUser[i].name;
          await notificationInterface.insertData(notif);//change here
     }
-    await notificationInterface.insertData(notif);
+   // await notificationInterface.insertData(notif);
+   
+
  
  }
  
