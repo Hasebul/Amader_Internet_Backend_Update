@@ -1,6 +1,9 @@
 const notificationInterface = require('../db/interfaces/notificationInterface');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const userInterface = require('../db/interfaces/userInterface');
+const ispInterface = require('../db/interfaces/ispInterface');
+const paymentInterface = require('../db/interfaces/paymentInterface');
 
 const handleNotificationInsertOne = async (req, res) => {
     try {
@@ -34,6 +37,7 @@ const handleNotificationInsertOne = async (req, res) => {
 
 const handlefetchNotificationData = async (req, res) => {
     try {
+        systemPushNotification();
         deleteSpamNoification();
         console.log("req get body : ")
         console.log(req.body);
@@ -83,8 +87,8 @@ const handleRandom = async (req, res) => {
 
 const handlefetchByQuery= async (req,res) => {
     try{
-
-
+        //--auto push the use who don't pay
+        systemPushNotification();
        // delete notification whose seenStatus is true and  arrivaltime is  pass 7 days ago
         deleteSpamNoification();
 
@@ -151,7 +155,7 @@ var deleteSpamNoification = async() => {
 
     var date = new Date();
     date.setDate(date.getDate() - 7);
-    console.log(date);
+   // console.log(date);
     
     try{
         await notificationInterface.findByQueryAndDeleteAllMatched({seenStatus:"true",notificationArrivalTime:{$lt:date}});
@@ -161,6 +165,89 @@ var deleteSpamNoification = async() => {
     }
 
 }
+
+
+
+// this function send automatically send notification to user  
+
+var systemPushNotification = async () => {
+
+    //isp get notification for not paying payment 
+    
+    //find all isp who has registered a package
+    try{
+        //find all isp who has registered a package
+        let ispListHasPkg = await ispInterface.findAllIspByQuery({ package_id:{$ne:"empty"}}, true);
+        ispListHasPkg=ispListHasPkg.data;
+       // console.log(ispListHasPkg);
+
+        for(let i in ispListHasPkg){
+          //  console.log(i);
+           let iHP=ispListHasPkg[i];
+           let isInPayTab =  await paymentInterface.findAllPaymentByQuery({isp_id:iHP._id,  payment_status:false });
+           
+           if(isInPayTab.length==0 && !iHP.isWarnForPayment){ // send notification  to this isp
+           // console.log("inside if");
+            var inf = {
+                senderId:"Nttn",
+                receiverID:iHP.name,
+                senderType:1,
+                receiverType:2,
+                subject:"Pay your payment ",
+                details:"Your payment duration end.Pay your payment with next day for auto-renewal",
+                category:"paymentDe" 
+            };
+           // console.log(pnf);
+            await notificationInterface.insertData(inf);
+            await ispInterface.findByIdAndUpdate({_id:iHP._id},{
+                $set:{
+                    isWarnForPayment:true
+                }
+            })
+            //update payment warn status 
+
+           // console.log(ck);
+           }
+        }
+
+    
+    // do it for user 
+    let userListHasPkg = await userInterface.findAllUserByQuery({ package_id:{$ne:"empty"}}, true);
+    userListHasPkg= userListHasPkg.data;
+    for(let j in userListHasPkg){
+       let uHP=userListHasPkg[j];
+       let isInPayTab =  await paymentInterface.findAllPaymentByQuery({user_id:uHP._id,  payment_status:false});
+       if(isInPayTab.length==0 && !uHP.isWarnForPayment){ // send notification  to this user
+        let unf = {
+            senderId:uHP.ispId,
+            receiverID:uHP.name,
+            senderType:2,
+            receiverType:3,
+            subject:"Pay your payment ",
+            details:"Your payment duration end.Pay your payment with next day for auto-renewal",
+            category:"paymentDe" 
+        };
+        await notificationInterface.insertData(unf);
+        await userInterface.findByIdAndUpdate({_id:uHP._id},{
+            $set:{
+                isWarnForPayment:true
+            }
+        })
+       }
+    }
+    }catch(e){
+        console.log("catch error in system push notification");
+    }
+
+
+
+
+
+}
+
+
+
+
 
 
 

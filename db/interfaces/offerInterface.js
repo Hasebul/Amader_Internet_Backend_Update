@@ -132,7 +132,7 @@ const findByQueryAndUpdateAllMatch = async (query, update) => {
   
     try {
         let data = await Offer.findOneAndUpdate(query,update);
-
+        //console.log(data);
         if (data){
             return {
                 data,
@@ -165,7 +165,7 @@ const findAllOfferByQuery = async (query, option) => {
       
 
         let data = await Offer.find(query);
-       
+        //console.log((data.length));
         if (data){
             return {
                 data,

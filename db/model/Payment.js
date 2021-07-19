@@ -56,6 +56,10 @@ var PaymentSchema = new mongoose.Schema({
     paymentDuration:{
         type:Number,
         required:true
+    },
+    isAlreadyWarn:{
+        type:Boolean,
+        default:false
     }
 
 });

@@ -41,7 +41,7 @@ var NotificationSchema = new mongoose.Schema({
     },
     notificationArrivalTime : {
         type : Date,
-        default :getToday()
+        default :new Date()
     },
     category:{
         type:String, 
@@ -50,11 +50,11 @@ var NotificationSchema = new mongoose.Schema({
 });
 
 
-function getToday() {
-    let today = new Date();
-    today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
-    return today;
-}
+// function getToday() {
+//     let today = new Date();
+//     today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+//     return today;
+// }
 
 var Notification = mongoose.model('Notification', NotificationSchema);
 

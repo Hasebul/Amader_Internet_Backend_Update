@@ -58,7 +58,44 @@ const fetchData = async (req,res) => {
 };
 
 
+
+const findAllPaymentByQuery = async (query) => {
+    try {
+      
+
+        let data = await Payment.find(query);
+       
+        if (data){
+            return {
+                data,
+                message: 'ISP Found',
+                status: 'OK', 
+                length: data.length
+            }
+        } else {
+            return {
+                data: null,
+                message: 'ISP Not Found',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+};
+
+
+
+
+
+
 module.exports = {
     insertData,
-    fetchData
+    fetchData,
+    findAllPaymentByQuery
 }

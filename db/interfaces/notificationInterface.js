@@ -2,6 +2,7 @@ const {Notification}= require('../model/Notification');
 
 const insertData = async (Object) => {
     try {
+       // console.log("inside nif");
        // console.log(Object);
         let Data = new Notification(Object);//problem
       //  console.log(Data);

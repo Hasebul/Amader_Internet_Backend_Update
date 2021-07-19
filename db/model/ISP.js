@@ -21,7 +21,8 @@ var ISPSchema = new mongoose.Schema({
     },
     package_id : {
         type : String,
-        required : true
+        required : true,
+        default:"empty"
     },
     license_id : {
         type : String,
@@ -40,6 +41,11 @@ var ISPSchema = new mongoose.Schema({
     remaining_bandwidth : {
         type : Number,
         default : null,
+    },
+
+    isWarnForPayment:{
+       type: Boolean,
+       default:false
     },
     
     balance:{

@@ -22,7 +22,8 @@ var UserSchema  = new mongoose.Schema({
     },
     package_id : {
         type : String,
-        required : true
+        required : true,
+        default:"empty"
     },
     nid : {
         type : String,
@@ -52,7 +53,11 @@ var UserSchema  = new mongoose.Schema({
         default:0
     },
 
-
+   
+    isWarnForPayment:{
+        type: Boolean,
+        default:false
+     },
 
 
     tokens : [{
