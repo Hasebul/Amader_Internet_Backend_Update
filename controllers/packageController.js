@@ -261,7 +261,7 @@ var sendUpdatePackageStatusToUser = async(package,status) => {
 
 
 
-var sendAddOfferNotificationToUser = async(package,status) => {
+var sendAddOfferNotificationToUser = async(package) => {
    
     //console.log(package);
     //console.log(status);
@@ -278,8 +278,8 @@ var sendAddOfferNotificationToUser = async(package,status) => {
          receiverID:"KS",
          senderType:1,
          receiverType:2,
-         subject:offer.name+" added to "+package.name+" Package.",
-         details:offer.name+" added to "+package.name+" Package.You know enjoy "+offer.reduction+"% reduction  price.Hurry Up & Buy this package.Stock is limited"
+         subject:offer.name+" offer added to "+package.name+" Package.",
+         details:offer.name+" offer added to "+package.name+" Package.You know enjoy "+offer.reduction+"% reduction  price.Hurry Up & Buy this package.Stock is limited"
      };
      
      
