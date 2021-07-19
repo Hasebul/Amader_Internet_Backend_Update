@@ -34,7 +34,7 @@ const handleNotificationInsertOne = async (req, res) => {
 
 const handlefetchNotificationData = async (req, res) => {
     try {
-        
+        deleteSpamNoification();
         console.log("req get body : ")
         console.log(req.body);
         //console.log("inside  handlefetchIspPackages");
@@ -83,6 +83,11 @@ const handleRandom = async (req, res) => {
 
 const handlefetchByQuery= async (req,res) => {
     try{
+
+
+       // delete notification whose seenStatus is true and  arrivaltime is  pass 7 days ago
+        deleteSpamNoification();
+
        // console.log(req.body);
         var rId= req.body.receiverID;
         var rType=req.body.receiverType;
@@ -136,7 +141,27 @@ const handlefetchByQuery= async (req,res) => {
      }
      
      }
+
+// ----- helping function -------------- 
+
+
+var deleteSpamNoification = async() => {
+
+    //deleteMany({ name: /Stark/, age: { $gte: 18 } });
+
+    var date = new Date();
+    date.setDate(date.getDate() - 7);
+    console.log(date);
     
+    try{
+        await notificationInterface.findByQueryAndDeleteAllMatched({seenStatus:"true",notificationArrivalTime:{$lt:date}});
+
+    }catch(e){
+        console.log("catch error in deleteSpamNoification");
+    }
+
+}
+
 
 
 module.exports = {

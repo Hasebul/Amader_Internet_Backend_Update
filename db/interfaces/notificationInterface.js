@@ -123,9 +123,46 @@ const findByIdAndUpdate = async (id, update)=>{
 
 
 
+
+
+const findByQueryAndDeleteAllMatched = async (query)=>{
+    //deleteMany({ name: /Stark/, age: { $gte: 18 } });
+    try {
+        let data = await Notification.deleteMany(query);
+
+        if (data){
+            return {
+                data,
+                message: 'NOtification deleted',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'Notifications deletion Failed',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+
+
+}
+
+
+
+
+
 module.exports = {
     insertData,
     fetchData,
     findNotificationByQuery,
     findByIdAndUpdate,
+    findByQueryAndDeleteAllMatched
 }
