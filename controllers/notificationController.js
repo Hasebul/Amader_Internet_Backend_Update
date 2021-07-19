@@ -65,17 +65,21 @@ const handlefetchNotificationData = async (req, res) => {
     }
 }
 
-const handleRandom = async (req, res) => {
+const handleUnseenNotificationCount= async (req, res) => {
   
     try {
-        
-        const random = Math.floor(Math.random() * 5) % 5 ;
+
+        let rId= req.body.receiverID;
+        let rType=req.body.receiverType;
+        let notifs = await notificationInterface.findNotificationByQuery ({receiverID:rId,receiverType:rType,seenStatus:false});
+        notifs=notifs.data;
+        const unseenNot = notifs.length ;
          
-        return res.status(200).send({Random:random });
+        return res.status(200).send({unseenCount:unseenNot });
         
     } catch (e) {
         return res.status(500).send({
-            message: 'ERROR in POST /api/notifications/Random ',
+            message: 'ERROR in POST /api/notifications/unseenNotificationCount ',
             error: e.message
         });
     }
@@ -93,8 +97,8 @@ const handlefetchByQuery= async (req,res) => {
         deleteSpamNoification();
 
        // console.log(req.body);
-        var rId= req.body.receiverID;
-        var rType=req.body.receiverType;
+        let rId= req.body.receiverID;
+        let rType=req.body.receiverType;
         let notifs = await notificationInterface.findNotificationByQuery ({receiverID:rId,receiverType:rType});//can generate error
         //let Packages = Data.data;
         if (notifs.status === 'OK') {
@@ -176,7 +180,32 @@ var systemPushNotification = async () => {
     
     //find all isp who has registered a package
     try{
+      
+        //----update--payment--status------------------------
+        
+        let allPayment = await paymentInterface.fetchData("req","res");
+        allPayment=allPayment.data;
+        for(let p in allPayment){
+              let pmt = allPayment[p];
+              let tl=new Date();
+              tl.setMonth(tl.getDate()-pmt.paymentDuration);
+              if(tl>pmt.payment_time){
+                    //update_payment_status_false
+                    await paymentInterface.findByIdAndUpdate({_id:pmt._id},{
+                        $set: {
+                            payment_status:false
+                        }
+                    })
+              }
+
+        }
+      
+      
+      
         //find all isp who has registered a package
+
+      
+
         let ispListHasPkg = await ispInterface.findAllIspByQuery({ package_id:{$ne:"empty"}}, true);
         ispListHasPkg=ispListHasPkg.data;
        // console.log(ispListHasPkg);
@@ -254,7 +283,7 @@ var systemPushNotification = async () => {
 module.exports = {
     handleNotificationInsertOne ,
     handlefetchNotificationData,
-    handleRandom,
+    handleUnseenNotificationCount,
     handlefetchByQuery,
     handleUpdateNotificationSeenStatus,
 }

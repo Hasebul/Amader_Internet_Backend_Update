@@ -11,7 +11,7 @@ notificationRouter.post('/insert',notificationController.handleNotificationInser
 
 notificationRouter.get('/fetch', notificationController.handlefetchNotificationData);//ispController.handleRequest ) ;// dorkar nai eta
 
-notificationRouter.get('/random', notificationController.handleRandom);
+notificationRouter.post('/unseenNotificationCount', notificationController.handleUnseenNotificationCount);
 notificationRouter.post('/fetchByQuery',notificationController.handlefetchByQuery);
 notificationRouter.post('/updateSeenStatus',notificationController.handleUpdateNotificationSeenStatus);
 

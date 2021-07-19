@@ -91,11 +91,42 @@ const findAllPaymentByQuery = async (query) => {
 
 
 
+const findByIdAndUpdate = async (id, update)=>{
+
+    try {
+        let data = await Payment.findByIdAndUpdate(id, update);
+
+        if (data){
+            return {
+                data,
+                message: 'Payment status Update Successful',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'Payment status Update Failed',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+
+
+}
+
 
 
 
 module.exports = {
     insertData,
     fetchData,
-    findAllPaymentByQuery
+    findAllPaymentByQuery,
+    findByIdAndUpdate
 }
