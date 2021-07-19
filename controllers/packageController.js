@@ -2,7 +2,10 @@ const packageInterface = require('../db/interfaces/packageInterface');
 const notificationInterface = require('../db/interfaces/notificationInterface');
 const ispInterface = require('../db/interfaces/ispInterface');
 const userInterface = require('../db/interfaces/userInterface');
+const offerInterface = require('../db/interfaces/offerInterface');
 const { cond } = require('lodash');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const handleInsertPackage = async (req, res) => {
     try {
@@ -175,6 +178,12 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
      });
       
      
+     // if offer id is not -1 then send notification to all isp 
+     
+     if(req.body.offerId != "-1" ){
+          sendAddOfferNotificationToUser(package);
+     }
+
      return res.status(200).send("Sucessfully Update offer");
      
  
@@ -248,6 +257,60 @@ var sendUpdatePackageStatusToUser = async(package,status) => {
    
 
 }
+
+
+
+
+var sendAddOfferNotificationToUser = async(package,status) => {
+   
+    //console.log(package);
+    //console.log(status);
+     
+    //get_offer_by_offer_id
+
+     let oid=ObjectId(package.offerId);
+     let offerData = await offerInterface.findOfferByQuery({_id:oid},true);
+     let offer =offerData.data; 
+
+     var packageUser=null;
+     var notif = {
+         senderId:package.packageCreator,
+         receiverID:"KS",
+         senderType:1,
+         receiverType:2,
+         subject:offer.name+" added to "+package.name+" Package.",
+         details:offer.name+" added to "+package.name+" Package.You know enjoy "+offer.reduction+"% reduction  price.Hurry Up & Buy this package.Stock is limited"
+     };
+     
+     
+ 
+ 
+     if(package.packageCreator==="Nttn"){ // nttn send notification to isp
+              notif.senderType=1;
+              notif.receiverType=2;
+              let dummyData = await ispInterface.fetchIspData ("req","res");//can generate error
+              packageUser=  dummyData.data;
+     }
+     else{
+         notif.senderType=2;
+         notif.receiverType=3;
+         let dummyData = await userInterface.fetchUserData("req","res");//can generate error
+         packageUser=  dummyData.data;
+ 
+     }
+     
+     // console.log(packageUser);
+ 
+     for(var i in packageUser){
+        // console.log(packageUser[i].name);
+         notif.receiverID = packageUser[i].name;
+         await notificationInterface.insertData(notif);//change here
+    }
+    
+ 
+ }
+ 
+ 
 
 
 
