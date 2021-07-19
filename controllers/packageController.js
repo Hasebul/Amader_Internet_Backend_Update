@@ -180,11 +180,12 @@ const handleUpdatePackageOngoingStatus= async (req, res) => {
      
      // if offer id is not -1 then send notification to all isp 
      
-     if(req.body.offerId != "-1" ){
+     if(req.body.offerId !== "-1" ){
           sendAddOfferNotificationToUser(package);
+          return res.status(200).send("Sucessfully Update offer");
      }
-
-     return res.status(200).send("Sucessfully Update offer");
+    else 
+     return res.status(201).send("UnSucessfully Update offer");
      
  
  } catch (e) {
@@ -272,8 +273,8 @@ var sendAddOfferNotificationToUser = async(package) => {
      let offerData = await offerInterface.findOfferByQuery({_id:oid},true);
      let offer =offerData.data; 
 
-     var packageUser=null;
-     var notif = {
+     let packageUser=null;
+     let notif = {
          senderId:package.packageCreator,
          receiverID:"KS",
          senderType:1,
