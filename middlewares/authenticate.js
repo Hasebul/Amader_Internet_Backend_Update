@@ -37,7 +37,8 @@ let handleIspLogIn = async (req, res) => {
            // console.log(t);
             //console.log("problem here ");
             await isp.save();
-            return res.status(201).send({isp,token});
+            let user = isp;
+            return res.status(201).send({user,token});
         } else {
             return res.status(203).send({
                 message: "Incorrect password"
@@ -115,7 +116,8 @@ let handleNttnLogIn = async (req, res) => {
            // console.log(t);
             //console.log("problem here ");
             await nttn.save();
-            return res.status(201).send({nttn,token});
+            let user = nttn;
+            return res.status(201).send({user,token});
         } else {
             return res.status(203).send({
                 message: "Incorrect password"
