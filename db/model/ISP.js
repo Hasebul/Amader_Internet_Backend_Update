@@ -40,7 +40,7 @@ var ISPSchema = new mongoose.Schema({
     },
     remaining_bandwidth : {
         type : Number,
-        default : null,
+        default : 0,
     },
 
     isWarnForPayment:{
@@ -48,6 +48,12 @@ var ISPSchema = new mongoose.Schema({
        default:false
     },
     
+    expirationTime:{
+        type:Date,
+        require:true
+    },
+
+
     balance:{
         type:Number,
         default:0

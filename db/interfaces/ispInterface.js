@@ -56,7 +56,7 @@ const fetchIspData = async (req,res) => {
 };
 
 
-const getPackages= async ( preferences) => { //preferences 
+const getPackages= async ( preferences) => { // this is not needed any more 
     try {
     
     console.log( preferences );
@@ -184,13 +184,13 @@ const findByIdAndUpdate = async (id, update)=>{
         if (data){
             return {
                 data,
-                message: 'ISP Token Update Successful',
+                message: ' Update Successful',
                 status: 'OK'
             }
         } else {
             return {
                 data: null,
-                message: 'ISP Token Update Failed',
+                message: ' Update Failed',
                 status: 'ERROR'
             };
         }

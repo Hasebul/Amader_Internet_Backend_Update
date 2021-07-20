@@ -11,9 +11,10 @@ ispRouter.post('/insert',ispController.handleIspInsertOne);//ispController.handl
 
 ispRouter.post('/preferPackages', ispController.handlefetchIspPackages ) ;// dorkar nai eta
 ispRouter.post('/fetchOwnPackage',ispController.handlefetchOwnPackage);//isp fetch his own registered package
+ispRouter.post('/fetchOwnData',ispController.handlefetchOwnData);
 
-ispRouter.get('/fetch',ispController.getIspData);
-
+ispRouter.get('/fetch',ispController.getIspData);//dorkar nai eta 
+ispRouter.post('/buyPackage',ispController.handlebuyPackage);
 
 ispRouter.post('/login',authenticate.handleIspLogIn)
 ispRouter.post('/logout',authenticate.handleIspAuthentication,ispController.handleIspLogOut);

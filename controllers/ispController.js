@@ -96,6 +96,42 @@ try{
 
 }
 
+
+const handlebuyPackage = async (req, res) => {
+       
+    try{
+
+        let Data = await ispInterface.findByIdAndUpdate({_id:req.body.id},{
+            $set:{
+                package_id:req.body.package_id
+            }
+        })
+
+        if(Data.status === 'OK'){
+            return res.send({
+                message: "package_id "+Data.message
+            })
+        }
+        else{
+            return res.status(400).send({
+                message:Data.message
+            })
+        }
+
+    }catch(e){
+
+        return res.status(500).send({
+            message:"catch error(ispController) api/isp/buyPackage",
+            error:e.messege
+        })
+
+    }
+
+
+}
+
+
+
 var handleIspLogOut= async (req,res) => {
     try {
          var isp = res.locals.middlewareResponse.isp;
@@ -139,6 +175,33 @@ var handleIspLogOutAll= async (req,res) => {
 }
 
 
+
+const handlefetchOwnData = async(req,res) => {
+     
+try{
+    let Data=await ispInterface.findIspByQuery({_id:req.body.id},true);
+    //console.log(Data);
+    if(Data.status === 'OK'){//find isp 
+           let isp=Data.data;
+           return res.send(isp);
+
+    }
+    else{
+        return res.status(400).send({
+            message:"Could not find package",
+            error:Data.message
+        })
+    }
+    
+ } catch (e) {
+    return res.status(500).send({
+        message: 'ERROR in POST /api/isp/fetchOwnData',
+        error: e.message
+    });
+   }
+
+
+}
 
 
 
@@ -205,5 +268,7 @@ module.exports = {
     handleUpdateConnectionStatus,
     handleIspLogOut,
     handleIspLogOutAll,
-    handlefetchOwnPackage
+    handlefetchOwnPackage,
+    handlebuyPackage,
+    handlefetchOwnData
 }

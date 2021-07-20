@@ -1,4 +1,5 @@
 const userInterface = require('../db/interfaces/userInterface');
+const packageInterface = require('../db/interfaces/packageInterface');
 
 const handleUserInsertOne = async (req, res) => {
     try {
@@ -98,12 +99,77 @@ const getUserData =  async (req, res) => {
 
 
 
+const handlefetchOwnPackage =async (req, res) => {
+
+    try{
+        let Data=await packageInterface.findPackageByQuery({_id:req.body.package_id},true);
+        if(Data.status === 'OK'){
+               let pkg=Data.data;
+               return res.send(pkg);
+    
+        }
+        else{
+            return res.status(400).send({
+                message:"Could not find package",
+                error:Data.message
+            })
+        }
+        
+     } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/isp/fetchOwnPackage',
+            error: e.message
+        });
+       }
+    
+    }
+
+
+
+
+
+const handlebuyPackage = async (req, res) => {
+       
+        try{
+    
+            let Data = await userInterface.findByIdAndUpdate({_id:req.body.id},{
+                $set:{
+                    package_id:req.body.package_id
+                }
+            })
+    
+            if(Data.status === 'OK'){
+                return res.send({
+                    message: "package_id "+Data.message
+                })
+            }
+            else{
+                return res.status(400).send({
+                    message:Data.message
+                })
+            }
+    
+        }catch(e){
+    
+            return res.status(500).send({
+                message:"catch error(userController) api/user/buyPackage",
+                error:e.messege
+            })
+    
+        }
+    
+    
+    }
+
+
 
 
 module.exports = {
     handleUserInsertOne,
     handleUserLogOut,
     handleUserLogOutAll,
-    getUserData
+    getUserData,
+    handlefetchOwnPackage,
+    handlebuyPackage
 
 }

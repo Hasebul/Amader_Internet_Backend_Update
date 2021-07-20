@@ -59,6 +59,43 @@ const handlefetchPaymentData = async (req, res) => {
 }
 
 
+
+
+// const handleInformationFetch = async (req,res) => {
+
+
+
+//     try {
+        
+//         //console.log("inside  handlefetchIspPackages");
+//         let type = req.body.type;
+//         let id = req.body.id;
+
+//         if(type === 2){ // find isp 
+
+//             let Data = await paymentInterface.findAllPaymentByQuery({isp_id:id});
+//             let isp = Data.data[0];
+
+
+//         }
+
+//         else if(type == 3){ // find user 
+        
+//         }
+//     } catch (e) {
+//         return res.status(500).send({
+//             message: 'ERROR in POST /api/pending/fetching',
+//             error: e.message
+//         });
+//     }
+
+
+
+
+
+
+// }
+
 //-------------------helper function ----------------------
 
 var updateIsWarnForPaymentStatus = async( isp_id,user_id,type ) => {
@@ -163,5 +200,6 @@ var sendNotificationOfPayment = async( payment ) => {
 
 module.exports = {
     handlePaymentInsertOne ,
-    handlefetchPaymentData
+    handlefetchPaymentData,
+    
 }

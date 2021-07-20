@@ -58,6 +58,11 @@ var PaymentSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
+
+    expirationDate:{
+        type:Date,
+        required:true
+    }
    
 
 });
