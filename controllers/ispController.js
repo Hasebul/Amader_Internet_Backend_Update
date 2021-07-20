@@ -1,4 +1,5 @@
 const ispInterface = require('../db/interfaces/ispInterface');
+const packageInterface = require('../db/interfaces/packageInterface');
 
 const handleIspInsertOne = async (req, res) => {
     try {
@@ -69,6 +70,31 @@ const handleUpdateConnectionStatus = async (req, res) => {
 }
 
 
+
+const handlefetchOwnPackage =async (req, res) => {
+
+try{
+    let Data=await packageInterface.findPackageByQuery({_id:req.body.package_id},true);
+    if(Data.status === 'OK'){//find isp 
+           let pkg=Data.data;
+           return res.send(pkg);
+
+    }
+    else{
+        return res.status(400).send({
+            message:"Could not find package",
+            error:Data.message
+        })
+    }
+    
+ } catch (e) {
+    return res.status(500).send({
+        message: 'ERROR in POST /api/isp/fetchOwnPackage',
+        error: e.message
+    });
+   }
+
+}
 
 var handleIspLogOut= async (req,res) => {
     try {
@@ -179,4 +205,5 @@ module.exports = {
     handleUpdateConnectionStatus,
     handleIspLogOut,
     handleIspLogOutAll,
+    handlefetchOwnPackage
 }
