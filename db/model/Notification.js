@@ -37,11 +37,14 @@ var NotificationSchema = new mongoose.Schema({
     },
     seenStatus : {
         type : Boolean,
-        default : false
+        default : false,
+        required:true
     },
     notificationArrivalTime : {
         type : Date,
-        default :new Date()
+        default :new Date(),
+        required:true
+
     },
     category:{
         type:String, 

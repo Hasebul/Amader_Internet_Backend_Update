@@ -50,13 +50,24 @@ var ISPSchema = new mongoose.Schema({
     
     expirationTime:{
         type:Date,
-        require:true
+        require:true,
+        default:null
     },
 
 
     balance:{
         type:Number,
         default:0
+    },
+    
+    region:{
+        type:String,
+        required: true
+    },
+
+    union:{
+        type:String,
+        required:true
     },
 
     tokens : [{

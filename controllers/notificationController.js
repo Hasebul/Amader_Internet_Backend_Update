@@ -37,8 +37,8 @@ const handleNotificationInsertOne = async (req, res) => {
 
 const handlefetchNotificationData = async (req, res) => {
     try {
-        systemPushNotification();
-        deleteSpamNoification();
+        // systemPushNotification();
+        // deleteSpamNoification();
         console.log("req get body : ")
         console.log(req.body);
         //console.log("inside  handlefetchIspPackages");
@@ -153,7 +153,7 @@ const handlefetchByQuery= async (req,res) => {
 // ----- helping function -------------- 
 
 
-var deleteSpamNoification = async() => {
+let deleteSpamNoification = async() => {
 
     //deleteMany({ name: /Stark/, age: { $gte: 18 } });
 
@@ -174,7 +174,7 @@ var deleteSpamNoification = async() => {
 
 // this function send automatically send notification to user  
 
-var systemPushNotification = async () => {
+let systemPushNotification = async () => {  //dorkar nai eta ar trigger likhe felbo etar
 
     //isp get notification for not paying payment 
     

@@ -8,7 +8,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 
 var UserSchema  = new mongoose.Schema({
-    name : {
+    name: {
         required : true,
         type : String,
         minlength : 1,
@@ -58,7 +58,16 @@ var UserSchema  = new mongoose.Schema({
         type: Boolean,
         default:false
      },
+     expirationTime:{
+        type:Date,
+        require:true,
+        default:null
+    },
 
+    union:{
+        type:String,
+        required:true
+    },
 
     tokens : [{
         access : {

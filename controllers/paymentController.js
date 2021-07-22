@@ -11,7 +11,7 @@ const handlePaymentInsertOne = async (req, res) => {
 
         if (Data.status === 'OK') {
 
-            updateIsWarnForPaymentStatus(req.body.isp_id, req.body.user_id,req.body.user_type);
+            //updateIsWarnForPaymentStatus(req.body.isp_id, req.body.user_id,req.body.user_type);
             sendNotificationOfPayment(req.body);
             return res.status(201).send({
                 message: Data.message
@@ -98,7 +98,7 @@ const handlefetchPaymentData = async (req, res) => {
 
 //-------------------helper function ----------------------
 
-var updateIsWarnForPaymentStatus = async( isp_id,user_id,type ) => {
+var updateIsWarnForPaymentStatus = async( isp_id,user_id,type ) => {  //dorkar nai eta likhe felbo
     //type 2 ->isp , 3 -> user  
 
     try{
@@ -130,7 +130,7 @@ var updateIsWarnForPaymentStatus = async( isp_id,user_id,type ) => {
 
 
 
-var sendNotificationOfPayment = async( payment ) => {
+var sendNotificationOfPayment = async( payment ) => { //eta dorkar ache
     //type 2 ->isp , 3 -> user  
 
     // "package_id" :"60f08ce854c42a3f58302558",
