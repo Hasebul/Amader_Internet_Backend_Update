@@ -12,8 +12,7 @@ var PaymentSchema = new mongoose.Schema({
     },
     isp_id : {
         type : {ObjectID},
-        default : null,
-        required : true
+        default : null
     },
     user_id : {
         type : {ObjectID},

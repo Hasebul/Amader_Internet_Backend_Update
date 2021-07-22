@@ -12,7 +12,7 @@ const handlePaymentInsertOne = async (req, res) => {
         if (Data.status === 'OK') {
 
             //updateIsWarnForPaymentStatus(req.body.isp_id, req.body.user_id,req.body.user_type);
-
+            assignEstablishmentTimeAndUpdateExpirationTime(req.body);
             sendNotificationOfPayment(req.body);
             return res.status(201).send({
                 message: Data.message
@@ -182,7 +182,7 @@ let sendNotificationOfPayment = async (payment) => { //eta dorkar ache
                 details: "You have receive " + payment.amount + "TK from " + user.name + ".TransictionId:" + payment.transaction_id + " gateway:" + payment.gateway + "."
             };
 
-            await notificationInterface.insertData(nttnNotif);
+            await notificationInterface.insertData(ispNotif);
 
         }
 
@@ -199,7 +199,7 @@ let sendNotificationOfPayment = async (payment) => { //eta dorkar ache
 
 
 
-let assignEstablishmentTime = async (payment) => { //eta dorkar ache
+let assignEstablishmentTimeAndUpdateExpirationTime = async (payment) => { //eta dorkar ache
     //type 2 ->isp , 3 -> user  
 
     // "package_id" :"60f08ce854c42a3f58302558",
@@ -214,52 +214,55 @@ let assignEstablishmentTime = async (payment) => { //eta dorkar ache
     let type = payment.user_type;
     try {
         if (type === 2) {
-
-
             //fech isp from isp_id 
             let isp = await ispInterface.findIspByQuery({ _id: payment.isp_id }, true);
             isp = isp.data;
-            if (!!isp.establishmentTime) {
-                // let expTime=new Date();
+            let expTime = isp.expirationTime;
+            if (!isp.establishmentTime) {
+                expTime=new Date();
                 // expTime.setMonth(expTime.getMonth()+payment.packageDuration);
 
                 await ispInterface.findByIdAndUpdate({ _id: isp._id }, {
                     $set: {
                         establishmentTime: new Date(),
-                        expirationTime: new Date()
+                        expirationTime: new Date(),
+                        connection_status:true,
+                        package_id:payment.package_id
                     }
                 })
             }
+            
+            // isp = await ispInterface.findIspByQuery({ _id: payment.isp_id }, true);
+            // isp = isp.data;
 
-            let expTime = isp.expirationTime;
+            
             expTime.setMonth(expTime.getMonth() + payment.packageDuration);
 
             await ispInterface.findByIdAndUpdate({ _id: isp._id }, {
                 $set: {
-                    expirationTime: expTime
+                    expirationTime: expTime,
                 }
             })
         }
         else if (type === 3) {
-
             //fech user from user_id 
-            let user = await userInterface.findIspByQuery({ _id: payment.user_id }, true);
+            let user = await userInterface.findUserByQuery({ _id: payment.user_id }, true);
             user = user.data;
-            if (!!user.establishmentTime) {
-                // let expTime=new Date();
+            let expTime = user.expirationTime;
+            if (!user.establishmentTime) {
+                expTime=new Date();
                 // expTime.setMonth(expTime.getMonth()+payment.packageDuration);
-
                 await userInterface.findByIdAndUpdate({ _id: user._id }, {
                     $set: {
                         establishmentTime: new Date(),
-                        expirationTime: new Date()
+                        expirationTime: new Date(),
+                        connection_status:true,
+                        package_id:payment.package_id
                     }
                 })
             }
 
-            let expTime = user.expirationTime;
             expTime.setMonth(expTime.getMonth() + payment.packageDuration);
-
             await userInterface.findByIdAndUpdate({ _id: user._id }, {
                 $set: {
                     expirationTime: expTime
