@@ -153,130 +153,125 @@ const handlefetchByQuery= async (req,res) => {
 // ----- helping function -------------- 
 
 
-let deleteSpamNoification = async() => {
+// let deleteSpamNoification = async() => {
 
-    //deleteMany({ name: /Stark/, age: { $gte: 18 } });
+//     //deleteMany({ name: /Stark/, age: { $gte: 18 } });
 
-    var date = new Date();
-    date.setDate(date.getDate() - 7);
-   // console.log(date);
+//     var date = new Date();
+//     date.setDate(date.getDate() - 7);
+//    // console.log(date);
     
-    try{
-        await notificationInterface.findByQueryAndDeleteAllMatched({seenStatus:"true",notificationArrivalTime:{$lt:date}});
+//     try{
+//         await notificationInterface.findByQueryAndDeleteAllMatched({seenStatus:"true",notificationArrivalTime:{$lt:date}});
 
-    }catch(e){
-        console.log("catch error in deleteSpamNoification");
-    }
+//     }catch(e){
+//         console.log("catch error in deleteSpamNoification");
+//     }
 
-}
+// }
 
 
 
 // this function send automatically send notification to user  
 
-let systemPushNotification = async () => {  //dorkar nai eta ar trigger likhe felbo etar
+// let systemPushNotification = async () => {  //dorkar nai eta ar trigger likhe felbo etar
 
-    //isp get notification for not paying payment 
+//     //isp get notification for not paying payment 
     
-    //find all isp who has registered a package
-    try{
+//     //find all isp who has registered a package
+//     try{
       
-        //----update--payment--status------------------------
+//         //----update--payment--status------------------------
         
-        let allPayment = await paymentInterface.fetchData("req","res");
-        allPayment=allPayment.data;
-        for(let p in allPayment){
-              let pmt = allPayment[p];
-              console.log(pmt.paymentDuration);
-              let tl=new Date();
-              tl.setMonth(tl.getMonth()-pmt.paymentDuration);
-              console.log(tl);
-              console.log(pmt.payment_time);
+//         let allPayment = await paymentInterface.fetchData("req","res");
+//         allPayment=allPayment.data;
+//         for(let p in allPayment){
+//               let pmt = allPayment[p];
+//               console.log(pmt.paymentDuration);
+//               let tl=new Date();
+//               tl.setMonth(tl.getMonth()-pmt.paymentDuration);
+//               console.log(tl);
+//               console.log(pmt.payment_time);
 
-              if(tl>pmt.payment_time){
-                    //update_payment_status_false
-                    await paymentInterface.findByIdAndUpdate({_id:pmt._id},{
-                        $set: {
-                            payment_status:false
-                        }
-                    })
-              }
+//               if(tl>pmt.payment_time){
+//                     //update_payment_status_false
+//                     await paymentInterface.findByIdAndUpdate({_id:pmt._id},{
+//                         $set: {
+//                             payment_status:false
+//                         }
+//                     })
+//               }
 
-        }
+//         }
       
       
       
-        //find all isp who has registered a package
+//         //find all isp who has registered a package
 
       
 
-        let ispListHasPkg = await ispInterface.findAllIspByQuery({ package_id:{$ne:"empty"}}, true);
-        ispListHasPkg=ispListHasPkg.data;
-       // console.log(ispListHasPkg);
+//         let ispListHasPkg = await ispInterface.findAllIspByQuery({ package_id:{$ne:"empty"}}, true);
+//         ispListHasPkg=ispListHasPkg.data;
+//        // console.log(ispListHasPkg);
 
-        for(let i in ispListHasPkg){
-          //  console.log(i);
-           let iHP=ispListHasPkg[i];
-           let isInPayTab =  await paymentInterface.findAllPaymentByQuery({isp_id:iHP._id,  payment_status:false });
+//         for(let i in ispListHasPkg){
+//           //  console.log(i);
+//            let iHP=ispListHasPkg[i];
+//            let isInPayTab =  await paymentInterface.findAllPaymentByQuery({isp_id:iHP._id,  payment_status:false });
            
-           if(isInPayTab.length==0 && !iHP.isWarnForPayment){ // send notification  to this isp
-           // console.log("inside if");
-            var inf = {
-                senderId:"Nttn",
-                receiverID:iHP.name,
-                senderType:1,
-                receiverType:2,
-                subject:"Pay your payment ",
-                details:"Your payment duration end.Pay your payment with next day for auto-renewal",
-                category:"paymentDe" 
-            };
-           // console.log(pnf);
-            await notificationInterface.insertData(inf);
-            await ispInterface.findByIdAndUpdate({_id:iHP._id},{
-                $set:{
-                    isWarnForPayment:true
-                }
-            })
-            //update payment warn status 
+//            if(isInPayTab.length==0 && !iHP.isWarnForPayment){ // send notification  to this isp
+//            // console.log("inside if");
+//             var inf = {
+//                 senderId:"Nttn",
+//                 receiverID:iHP.name,
+//                 senderType:1,
+//                 receiverType:2,
+//                 subject:"Pay your payment ",
+//                 details:"Your payment duration end.Pay your payment with next day for auto-renewal",
+//                 category:"paymentDe" 
+//             };
+//            // console.log(pnf);
+//             await notificationInterface.insertData(inf);
+//             await ispInterface.findByIdAndUpdate({_id:iHP._id},{
+//                 $set:{
+//                     isWarnForPayment:true
+//                 }
+//             })
+//             //update payment warn status 
 
-           // console.log(ck);
-           }
-        }
+//            // console.log(ck);
+//            }
+//         }
 
     
-    // do it for user 
-    let userListHasPkg = await userInterface.findAllUserByQuery({ package_id:{$ne:"empty"}}, true);
-    userListHasPkg= userListHasPkg.data;
-    for(let j in userListHasPkg){
-       let uHP=userListHasPkg[j];
-       let isInPayTab =  await paymentInterface.findAllPaymentByQuery({user_id:uHP._id,  payment_status:false});
-       if(isInPayTab.length==0 && !uHP.isWarnForPayment){ // send notification  to this user
-        let unf = {
-            senderId:uHP.ispId,
-            receiverID:uHP.name,
-            senderType:2,
-            receiverType:3,
-            subject:"Pay your payment ",
-            details:"Your payment duration end.Pay your payment with next day for auto-renewal",
-            category:"paymentDe" 
-        };
-        await notificationInterface.insertData(unf);
-        await userInterface.findByIdAndUpdate({_id:uHP._id},{
-            $set:{
-                isWarnForPayment:true
-            }
-        })
-       }
-    }
-    }catch(e){
-        console.log("catch error in system push notification");
-    }
-
-
-
-
-
-}
+//     // do it for user 
+//     let userListHasPkg = await userInterface.findAllUserByQuery({ package_id:{$ne:"empty"}}, true);
+//     userListHasPkg= userListHasPkg.data;
+//     for(let j in userListHasPkg){
+//        let uHP=userListHasPkg[j];
+//        let isInPayTab =  await paymentInterface.findAllPaymentByQuery({user_id:uHP._id,  payment_status:false});
+//        if(isInPayTab.length==0 && !uHP.isWarnForPayment){ // send notification  to this user
+//         let unf = {
+//             senderId:uHP.ispId,
+//             receiverID:uHP.name,
+//             senderType:2,
+//             receiverType:3,
+//             subject:"Pay your payment ",
+//             details:"Your payment duration end.Pay your payment with next day for auto-renewal",
+//             category:"paymentDe" 
+//         };
+//         await notificationInterface.insertData(unf);
+//         await userInterface.findByIdAndUpdate({_id:uHP._id},{
+//             $set:{
+//                 isWarnForPayment:true
+//             }
+//         })
+//        }
+//     }
+//     }catch(e){
+//         console.log("catch error in system push notification");
+//     }
+// }
 
 
 

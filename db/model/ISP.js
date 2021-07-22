@@ -43,10 +43,7 @@ var ISPSchema = new mongoose.Schema({
         default : 0,
     },
 
-    isWarnForPayment:{
-       type: Boolean,
-       default:false
-    },
+   
     
     expirationTime:{
         type:Date,
@@ -59,7 +56,7 @@ var ISPSchema = new mongoose.Schema({
         type:Number,
         default:0
     },
-    
+
     region:{
         type:String,
         required: true

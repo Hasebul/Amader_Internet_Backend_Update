@@ -54,11 +54,8 @@ var UserSchema  = new mongoose.Schema({
     },
 
    
-    isWarnForPayment:{
-        type: Boolean,
-        default:false
-     },
-     expirationTime:{
+   
+    expirationTime:{
         type:Date,
         require:true,
         default:null

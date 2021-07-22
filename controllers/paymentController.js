@@ -98,34 +98,34 @@ const handlefetchPaymentData = async (req, res) => {
 
 //-------------------helper function ----------------------
 
-var updateIsWarnForPaymentStatus = async( isp_id,user_id,type ) => {  //dorkar nai eta likhe felbo
-    //type 2 ->isp , 3 -> user  
+// var updateIsWarnForPaymentStatus = async( isp_id,user_id,type ) => {  //dorkar nai eta likhe felbo
+//     //type 2 ->isp , 3 -> user  
 
-    try{
-    if(type === 2 ){
+//     try{
+//     if(type === 2 ){
        
-        await ispInterface.findByIdAndUpdate({_id: isp_id},{
-            $set:{
-                isWarnForPayment:false
-            }
-        })
+//         await ispInterface.findByIdAndUpdate({_id: isp_id},{
+//             $set:{
+//                 isWarnForPayment:false
+//             }
+//         })
 
-    }
-    else if(type===3){
-        await userInterface.findByIdAndUpdate({_id: user_id},{
-            $set:{
-                isWarnForPayment:false
-            }
-        })
+//     }
+//     else if(type===3){
+//         await userInterface.findByIdAndUpdate({_id: user_id},{
+//             $set:{
+//                 isWarnForPayment:false
+//             }
+//         })
 
-    }
+//     }
     
-     } catch(e){
-         console.log("catch error inside updateIsWarnForPaymentStatus");
-         console.log(e);
-     }
+//      } catch(e){
+//          console.log("catch error inside updateIsWarnForPaymentStatus");
+//          console.log(e);
+//      }
 
-}
+// }
 
 
 
