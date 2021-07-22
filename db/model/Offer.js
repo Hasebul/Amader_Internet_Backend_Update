@@ -15,7 +15,6 @@ var OfferSchema  = new mongoose.Schema({
 
     startTime:{
         type:Date,
-        required:true,
         default:new Date()
     },
     expirationTime:{

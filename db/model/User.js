@@ -22,8 +22,7 @@ var UserSchema  = new mongoose.Schema({
     },
     package_id : {
         type : String,
-        required : true,
-        default:"empty"
+        default:null
     },
     nid : {
         type : String,
@@ -57,7 +56,6 @@ var UserSchema  = new mongoose.Schema({
    
     expirationTime:{
         type:Date,
-        require:true,
         default:null
     },
 

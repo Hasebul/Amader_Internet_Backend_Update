@@ -48,7 +48,7 @@ var NotificationSchema = new mongoose.Schema({
     },
     category:{
         type:String, 
-        defult:"empty"
+        defult:null
     }
 });
 

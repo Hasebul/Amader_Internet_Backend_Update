@@ -21,8 +21,7 @@ var ISPSchema = new mongoose.Schema({
     },
     package_id : {
         type : String,
-        required : true,
-        default:"empty"
+        default:null
     },
     license_id : {
         type : String,
@@ -47,7 +46,6 @@ var ISPSchema = new mongoose.Schema({
     
     expirationTime:{
         type:Date,
-        require:true,
         default:null
     },
 

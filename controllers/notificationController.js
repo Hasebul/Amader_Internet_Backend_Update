@@ -92,9 +92,9 @@ const handleUnseenNotificationCount= async (req, res) => {
 const handlefetchByQuery= async (req,res) => {
     try{
         //--auto push the use who don't pay
-        systemPushNotification();
+        //systemPushNotification();
        // delete notification whose seenStatus is true and  arrivaltime is  pass 7 days ago
-        deleteSpamNoification();
+        //deleteSpamNoification();
 
        // console.log(req.body);
         let rId= req.body.receiverID;

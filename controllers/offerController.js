@@ -154,7 +154,7 @@ var updateOfferStatusByExpirationDate= async() => {
                 var pkg = pkgs[k];
                 await packageInterface.findByIdAndUpdate({_id:pkg._id},{
                     $set:{
-                        offerId:"-1"
+                        offerId:null
                     }
                 })
             }

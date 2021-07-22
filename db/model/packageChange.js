@@ -18,12 +18,10 @@ var PackageChangeSchema = new mongoose.Schema({
     },
     isAccept:{
         type:Boolean,
-        requird:true,
         default:false
     },
     isSeen:{
         type:Boolean,
-        required:true,
         default:false
     },
     arrivalTime:{
