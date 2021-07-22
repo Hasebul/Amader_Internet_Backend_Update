@@ -30,7 +30,7 @@ var ISPSchema = new mongoose.Schema({
         required : true,
         trim : true
     },
-    connection_establishment_time: {
+    establishmentTime: {
         type: Date,
         default: null
     },

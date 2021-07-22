@@ -28,11 +28,6 @@ var PaymentSchema = new mongoose.Schema({
     //     type : {ObjectID},
     //     default : null
     // },
-    payment_status : { //eta dorkar nai 
-        type : Boolean,
-        default : false,
-        required : true
-    },
     payment_time : {
         type : Date,
         required : true,
@@ -54,17 +49,10 @@ var PaymentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    paymentDuration:{   //eta dorkar nai 
+    packageDuration:{ 
         type:Number,
         required:true
     },
-
-    expirationDate:{  //eta dorkar nai 
-        type:Date,
-        required:true
-    }
-   
-
 });
 
 

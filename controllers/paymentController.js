@@ -5,13 +5,14 @@ const notificationInterface = require('../db/interfaces/notificationInterface');
 
 const handlePaymentInsertOne = async (req, res) => {
     try {
-        
+
         //console.log("inside  handlePaymentInsertOne");
         let Data = await paymentInterface.insertData(req.body);//change here
 
         if (Data.status === 'OK') {
 
             //updateIsWarnForPaymentStatus(req.body.isp_id, req.body.user_id,req.body.user_type);
+
             sendNotificationOfPayment(req.body);
             return res.status(201).send({
                 message: Data.message
@@ -33,7 +34,7 @@ const handlePaymentInsertOne = async (req, res) => {
 
 const handlefetchPaymentData = async (req, res) => {
     try {
-        
+
         //console.log("inside  handlefetchIspPackages");
         let Data = await paymentInterface.fetchData(req.body);//change here
         console.log(Data);
@@ -43,7 +44,7 @@ const handlefetchPaymentData = async (req, res) => {
             delete Data.message;
             //console.log(pendingdata);
             return res.send(Data);
-    
+
         } else {
             return res.status(400).send({
                 message: 'Could not Insert User',
@@ -66,7 +67,7 @@ const handlefetchPaymentData = async (req, res) => {
 
 
 //     try {
-        
+
 //         //console.log("inside  handlefetchIspPackages");
 //         let type = req.body.type;
 //         let id = req.body.id;
@@ -80,7 +81,7 @@ const handlefetchPaymentData = async (req, res) => {
 //         }
 
 //         else if(type == 3){ // find user 
-        
+
 //         }
 //     } catch (e) {
 //         return res.status(500).send({
@@ -103,7 +104,7 @@ const handlefetchPaymentData = async (req, res) => {
 
 //     try{
 //     if(type === 2 ){
-       
+
 //         await ispInterface.findByIdAndUpdate({_id: isp_id},{
 //             $set:{
 //                 isWarnForPayment:false
@@ -119,7 +120,7 @@ const handlefetchPaymentData = async (req, res) => {
 //         })
 
 //     }
-    
+
 //      } catch(e){
 //          console.log("catch error inside updateIsWarnForPaymentStatus");
 //          console.log(e);
@@ -130,7 +131,7 @@ const handlefetchPaymentData = async (req, res) => {
 
 
 
-var sendNotificationOfPayment = async( payment ) => { //eta dorkar ache
+let sendNotificationOfPayment = async (payment) => { //eta dorkar ache
     //type 2 ->isp , 3 -> user  
 
     // "package_id" :"60f08ce854c42a3f58302558",
@@ -143,52 +144,52 @@ var sendNotificationOfPayment = async( payment ) => { //eta dorkar ache
     // "paymentDuration":12
 
     let type = payment.user_type;
-    try{
-    if(type === 2 ){
-       
-        //send notification to "NTTN"
-        
-        //fech isp from isp_id 
-        let isp= await ispInterface.findIspByQuery({_id:payment.isp_id},true);
-        isp=isp.data;
+    try {
+        if (type === 2) {
 
-        let nttnNotif = {
-            senderId:isp.name,
-            receiverID:"Nttn",
-            senderType:2,
-            receiverType:1,
-            subject:"Receive "+payment.amount+"TK from "+isp.name,
-            details:"You have receive "+payment.amount+"TK from "+isp.name+".TransictionId:"+payment.transaction_id+" gateway:"+payment.gateway+"."
-        };
+            //send notification to "NTTN"
 
-        await notificationInterface.insertData(nttnNotif);
+            //fech isp from isp_id 
+            let isp = await ispInterface.findIspByQuery({ _id: payment.isp_id }, true);
+            isp = isp.data;
+
+            let nttnNotif = {
+                senderId: isp.name,
+                receiverID: "Nttn",
+                senderType: 2,
+                receiverType: 1,
+                subject: "Receive " + payment.amount + "TK from " + isp.name,
+                details: "You have receive " + payment.amount + "TK from " + isp.name + ".TransictionId:" + payment.transaction_id + " gateway:" + payment.gateway + "."
+            };
+
+            await notificationInterface.insertData(nttnNotif);
 
 
+        }
+        else if (type === 3) {
+            //send notifiction to "ISP"
+
+            //fetch user form user_id 
+            let user = await userInterface.findUserByQuery({ _id: payment.user_id }, true);
+            user = user.data;
+
+            let ispNotif = {
+                senderId: user.name,
+                receiverID: user.ispId, //change here fetch receiverID from user 
+                senderType: 3,
+                receiverType: 2,
+                subject: "Receive " + payment.amount + "TK from " + user.name,
+                details: "You have receive " + payment.amount + "TK from " + user.name + ".TransictionId:" + payment.transaction_id + " gateway:" + payment.gateway + "."
+            };
+
+            await notificationInterface.insertData(nttnNotif);
+
+        }
+
+    } catch (e) {
+        console.log("catch error inside sendNotificationOfPayment");
+        console.log(e);
     }
-    else if(type===3){
-        //send notifiction to "ISP"
-        
-        //fetch user form user_id 
-        let user= await userInterface.findUserByQuery({_id:payment.user_id},true);
-        user=user.data;
-
-        let ispNotif = {
-            senderId:user.name,
-            receiverID:user.ispId, //change here fetch receiverID from user 
-            senderType:3,
-            receiverType:2,
-            subject:"Receive "+payment.amount+"TK from "+user.name,
-            details:"You have receive "+payment.amount+"TK from "+user.name+".TransictionId:"+payment.transaction_id+" gateway:"+payment.gateway+"."
-        };
-
-        await notificationInterface.insertData(nttnNotif);
-
-    }
-    
-     } catch(e){
-         console.log("catch error inside sendNotificationOfPayment");
-         console.log(e);
-     }
 
 }
 
@@ -198,8 +199,87 @@ var sendNotificationOfPayment = async( payment ) => { //eta dorkar ache
 
 
 
+let assignEstablishmentTime = async (payment) => { //eta dorkar ache
+    //type 2 ->isp , 3 -> user  
+
+    // "package_id" :"60f08ce854c42a3f58302558",
+    // "isp_id" :"60e93678fbecd640544a2cec",
+    // "payment_status" :"true",
+    // "gateway" : "BKASH",
+    // "transaction_id" :"123abc",
+    // "amount":"103430",
+    // "method":"BAKSH",
+    // "paymentDuration":12
+
+    let type = payment.user_type;
+    try {
+        if (type === 2) {
+
+
+            //fech isp from isp_id 
+            let isp = await ispInterface.findIspByQuery({ _id: payment.isp_id }, true);
+            isp = isp.data;
+            if (!!isp.establishmentTime) {
+                // let expTime=new Date();
+                // expTime.setMonth(expTime.getMonth()+payment.packageDuration);
+
+                await ispInterface.findByIdAndUpdate({ _id: isp._id }, {
+                    $set: {
+                        establishmentTime: new Date(),
+                        expirationTime: new Date()
+                    }
+                })
+            }
+
+            let expTime = isp.expirationTime;
+            expTime.setMonth(expTime.getMonth() + payment.packageDuration);
+
+            await ispInterface.findByIdAndUpdate({ _id: isp._id }, {
+                $set: {
+                    expirationTime: expTime
+                }
+            })
+        }
+        else if (type === 3) {
+
+            //fech user from user_id 
+            let user = await userInterface.findIspByQuery({ _id: payment.user_id }, true);
+            user = user.data;
+            if (!!user.establishmentTime) {
+                // let expTime=new Date();
+                // expTime.setMonth(expTime.getMonth()+payment.packageDuration);
+
+                await userInterface.findByIdAndUpdate({ _id: user._id }, {
+                    $set: {
+                        establishmentTime: new Date(),
+                        expirationTime: new Date()
+                    }
+                })
+            }
+
+            let expTime = user.expirationTime;
+            expTime.setMonth(expTime.getMonth() + payment.packageDuration);
+
+            await userInterface.findByIdAndUpdate({ _id: user._id }, {
+                $set: {
+                    expirationTime: expTime
+                }
+            })
+        }
+
+    } catch (e) {
+        console.log("catch error inside sendNotificationOfPayment");
+        console.log(e);
+    }
+
+}
+
+
+
+
+
 module.exports = {
-    handlePaymentInsertOne ,
+    handlePaymentInsertOne,
     handlefetchPaymentData,
-    
+
 }

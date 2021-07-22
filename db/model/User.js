@@ -39,9 +39,9 @@ var UserSchema  = new mongoose.Schema({
         minLength:1
     },
 
-    connection_establishment_date: {
+    establishmentTime: {
         type: Date,
-        default: new Date()
+        default: null
     },
     connection_status : {
         type : Boolean,
