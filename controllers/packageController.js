@@ -88,6 +88,70 @@ const handlefetchByQuery = async (req, res) => {
 
 
 
+const handlefetchByQueryWithStatus = async (req, res) => {
+    try {
+        // console.log(req.body);
+        let type = req.body.type;//2-->isp,3-->user
+        let id = req.body.id;
+        let packageCreator = "Nttn"; // find isp id normally 
+
+        let pkgUser = null;
+
+        if (type === 2) {  //find isp 
+            let Data = await ispInterface.findIspByQuery({ _id: id }, "done");
+            pkgUser = Data.data;
+            packageCreator = "Nttn";
+        }
+        else if (type === 3) {
+            let Data = await userInterface.findUserByQuery({ _id: id }, "done");
+            pkgUser = Data.data;
+            packageCreator = pkgUser.ispId;
+        }
+
+        console.log(pkgUser);
+        let Packages = await packageInterface.findPackageByQuery({ packageCreator: packageCreator }, { username: 1, userType: 1 });//can generate error
+
+        //let Packages = Data.data;
+        if (Packages.status === 'OK') {
+            //res.send(Packages);
+            delete Packages.status;
+            delete Packages.message;
+            let packages = Packages.data;
+            let pkgsWithStatus = [];
+
+            for (let t in packages) {
+                let flag = true;
+                for (let p in pkgUser.packages) {
+                    if (packages[t]._id.toString() == pkgUser.packages[p].packageId) {
+                        pkgsWithStatus.push({ data: packages[t], status: false });
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    pkgsWithStatus.push({ data: packages[t], status: true });
+
+                }
+            }
+            return res.send(pkgsWithStatus);
+
+        } else {
+            return res.status(400).send({
+                message: 'Could not find package',
+                error: Packages.message
+            });
+        }
+    } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/package/fetchByQueryWithStatus',
+            error: e.message
+        });
+    }
+
+}
+
+
+
 
 const handleUpdatePackage = async (req, res) => {
     try {
@@ -323,4 +387,5 @@ module.exports = {
     handleUpdatePackage,
     handleUpdatePackageOngoingStatus,
     handleAddOffer,
+    handlefetchByQueryWithStatus
 }
