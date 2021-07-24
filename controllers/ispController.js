@@ -3,8 +3,8 @@ const packageInterface = require('../db/interfaces/packageInterface');
 
 const handleIspInsertOne = async (req, res) => {
     try {
-        
-       
+
+
         let ispData = await ispInterface.insertIsp(req.body);
 
         if (ispData.status === 'OK') {
@@ -28,7 +28,7 @@ const handleIspInsertOne = async (req, res) => {
 
 const handlefetchIspPackages = async (req, res) => {
     try {
-        
+
         //console.log("inside  handlefetchIspPackages");
         let ispPackages = await ispInterface.getPackages(req.body);//change here
 
@@ -54,12 +54,12 @@ const handleUpdateConnectionStatus = async (req, res) => {
     try {
         var isp = res.locals.middlewareResponse.isp;
         var updateData = await ispInterface.UpdateConnectionStatus(isp);
-         if(updateData.status === 'ok'){
-             res.send(updateData);
-         }
-         else {
-             res.send({message: " Error(ispController) api/isp/updateconnectionstatus . Could Not Update ISP Connection Status"});
-         }
+        if (updateData.status === 'ok') {
+            res.send(updateData);
+        }
+        else {
+            res.send({ message: " Error(ispController) api/isp/updateconnectionstatus . Could Not Update ISP Connection Status" });
+        }
 
     } catch (e) {
         return res.status(500).send({
@@ -71,58 +71,95 @@ const handleUpdateConnectionStatus = async (req, res) => {
 
 
 
-const handlefetchOwnPackage =async (req, res) => {
+const handlefetchOwnPackage = async (req, res) => {
 
-try{
-    let Data=await packageInterface.findPackageByQuery({_id:req.body.package_id},true);
-    if(Data.status === 'OK'){//find isp 
-           let pkg=Data.data;
-           return res.send(pkg);
+    try {
+        let Data = await packageInterface.findPackageByQuery({ _id: req.body.package_id }, true);
+        if (Data.status === 'OK') {//find isp 
+            let pkg = Data.data;
+            return res.send(pkg);
 
+        }
+        else {
+            return res.status(400).send({
+                message: "Could not find package",
+                error: Data.message
+            })
+        }
+
+    } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/isp/fetchOwnPackage',
+            error: e.message
+        });
     }
-    else{
-        return res.status(400).send({
-            message:"Could not find package",
-            error:Data.message
-        })
-    }
-    
- } catch (e) {
-    return res.status(500).send({
-        message: 'ERROR in POST /api/isp/fetchOwnPackage',
-        error: e.message
-    });
-   }
 
 }
 
 
-const handlebuyPackage = async (req, res) => {
-       
-    try{
 
-        let Data = await ispInterface.findByIdAndUpdate({_id:req.body.id},{
-            $set:{
-                package_id:req.body.package_id
+const handlefetchOwnPackagesArray = async (req, res) => {
+
+
+    try {
+
+        let isp = await ispInterface.findIspByQuery({ _id: req.body.id }, "done");
+        isp=isp.data;
+        console.log(isp);
+        let packages = [];
+        for (let t in isp.packages) {
+            let pkg = isp.packages[t];
+            let Data = await packageInterface.findPackageByQuery({ _id: pkg.packageId }, true);
+            let data = Data.data[0];
+            console.log(data);
+            packages.push(data);
+            
+        }
+        
+        return res.send(packages);
+
+    } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/isp/fetchOwnPackagesArray',
+            error: e.message
+        });
+    }
+
+}
+
+
+
+
+
+
+
+
+const handlebuyPackage = async (req, res) => {
+
+    try {
+
+        let Data = await ispInterface.findByIdAndUpdate({ _id: req.body.id }, {
+            $set: {
+                package_id: req.body.package_id
             }
         })
 
-        if(Data.status === 'OK'){
+        if (Data.status === 'OK') {
             return res.send({
-                message: "package_id "+Data.message
+                message: "package_id " + Data.message
             })
         }
-        else{
+        else {
             return res.status(400).send({
-                message:Data.message
+                message: Data.message
             })
         }
 
-    }catch(e){
+    } catch (e) {
 
         return res.status(500).send({
-            message:"catch error(ispController) api/isp/buyPackage",
-            error:e.messege
+            message: "catch error(ispController) api/isp/buyPackage",
+            error: e.messege
         })
 
     }
@@ -135,13 +172,13 @@ const handlebuyPackage = async (req, res) => {
 
 
 const handleAddPackageToArray = async (req, res) => {
-       
-    try{
 
-        let isp = await ispInterface.findIspByQuery({ _id: req.body.ispId});
-        let package = await packageInterface.findPackageByQuery({ _id: req.body.packageId});
-        isp=isp.data ;
-        package=package.data[0]; // all package find 
+    try {
+
+        let isp = await ispInterface.findIspByQuery({ _id: req.body.ispId });
+        let package = await packageInterface.findPackageByQuery({ _id: req.body.packageId });
+        isp = isp.data;
+        package = package.data[0]; // all package find 
         console.log(isp);
         console.log(package);
         //already package in the array 
@@ -153,20 +190,20 @@ const handleAddPackageToArray = async (req, res) => {
 
         //     }
         // }
-        let termTime= new Date();
-        termTime.setMonth(termTime.getMonth()+package.duration);
+        let termTime = new Date();
+        termTime.setMonth(termTime.getMonth() + package.duration);
         console.log(termTime);
-        let t = isp.packages.push({packageId:req.body.packageId,terminationTime:termTime});
+        let t = isp.packages.push({ packageId: req.body.packageId, terminationTime: termTime });
         await isp.save();
         return res.send({
-            message:"new package save to package array"
+            message: "new package save to package array"
         });
 
-    }catch(e){
+    } catch (e) {
 
         return res.status(500).send({
-            message:"catch error(ispController) api/isp/addPackageToArray",
-            error:e.messege
+            message: "catch error(ispController) api/isp/addPackageToArray",
+            error: e.messege
         })
 
     }
@@ -181,19 +218,19 @@ const handleAddPackageToArray = async (req, res) => {
 
 
 
-var handleIspLogOut= async (req,res) => {
+var handleIspLogOut = async (req, res) => {
     try {
-         var isp = res.locals.middlewareResponse.isp;
-         var token = res.locals.middlewareResponse.token;
+        var isp = res.locals.middlewareResponse.isp;
+        var token = res.locals.middlewareResponse.token;
 
         await ispInterface.findByIdAndUpdate(isp._id, {
             $pull: {
-                tokens: {token}
+                tokens: { token }
             }
         });
 
         return res.status(200).send("Sucessfully Logout");
-        
+
 
     } catch (e) {
         return res.status(500).send({
@@ -205,14 +242,14 @@ var handleIspLogOut= async (req,res) => {
 }
 
 
-var handleIspLogOutAll= async (req,res) => {
+var handleIspLogOutAll = async (req, res) => {
     try {
-         var isp = res.locals.middlewareResponse.isp;
-         var token = res.locals.middlewareResponse.token;
-        isp.tokens=[];
+        var isp = res.locals.middlewareResponse.isp;
+        var token = res.locals.middlewareResponse.token;
+        isp.tokens = [];
         isp.save();
         return res.status(200).send("Sucessfully Logging out from all devices");
-        
+
 
     } catch (e) {
         return res.status(500).send({
@@ -225,29 +262,29 @@ var handleIspLogOutAll= async (req,res) => {
 
 
 
-const handlefetchOwnData = async(req,res) => {
-     
-try{
-    let Data=await ispInterface.findIspByQuery({_id:req.body.id},true);
-    //console.log(Data);
-    if(Data.status === 'OK'){//find isp 
-           let isp=Data.data;
-           return res.send(isp);
+const handlefetchOwnData = async (req, res) => {
 
+    try {
+        let Data = await ispInterface.findIspByQuery({ _id: req.body.id }, true);
+        //console.log(Data);
+        if (Data.status === 'OK') {//find isp 
+            let isp = Data.data;
+            return res.send(isp);
+
+        }
+        else {
+            return res.status(400).send({
+                message: "Could not find package",
+                error: Data.message
+            })
+        }
+
+    } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/isp/fetchOwnData',
+            error: e.message
+        });
     }
-    else{
-        return res.status(400).send({
-            message:"Could not find package",
-            error:Data.message
-        })
-    }
-    
- } catch (e) {
-    return res.status(500).send({
-        message: 'ERROR in POST /api/isp/fetchOwnData',
-        error: e.message
-    });
-   }
 
 
 }
@@ -258,7 +295,7 @@ try{
 
 const handleIspRegister = async (req, res) => {
     try {
-        
+
         //console.log(req.body);
         let ispData = await ispInterface.insertIsp(req.body);//change here
 
@@ -280,12 +317,12 @@ const handleIspRegister = async (req, res) => {
     }
 }
 
-const getIspData =  async (req, res) => {
+const getIspData = async (req, res) => {
     try {
-        
+
         //console.log(req.body);
-        let ispData = await ispInterface.fetchIspData(req,res);//change here
-        
+        let ispData = await ispInterface.fetchIspData(req, res);//change here
+
         if (ispData.status === 'OK') {
             res.send(ispData);
             return res.status(201).send({
@@ -312,7 +349,7 @@ const getIspData =  async (req, res) => {
 module.exports = {
     handleIspRegister,
     getIspData,
-    handleIspInsertOne ,
+    handleIspInsertOne,
     handlefetchIspPackages,
     handleUpdateConnectionStatus,
     handleIspLogOut,
@@ -320,5 +357,6 @@ module.exports = {
     handlefetchOwnPackage,
     handlebuyPackage,
     handlefetchOwnData,
-    handleAddPackageToArray
+    handleAddPackageToArray,
+    handlefetchOwnPackagesArray
 }

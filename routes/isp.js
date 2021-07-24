@@ -10,7 +10,10 @@ const ispController = require('../controllers/ispController');
 ispRouter.post('/insert',ispController.handleIspInsertOne);//ispController.handleIspInsertOne
 
 ispRouter.post('/preferPackages', ispController.handlefetchIspPackages ) ;// dorkar nai eta
-ispRouter.post('/fetchOwnPackage',ispController.handlefetchOwnPackage);//isp fetch his own registered package
+ispRouter.post('/fetchOwnPackage',ispController.handlefetchOwnPackage);//dorkar nai ar delete kora lagbe
+ispRouter.post('/fetchOwnPackageArray',ispController.handlefetchOwnPackagesArray);//isp fetch his own registered packages
+
+
 ispRouter.post('/fetchOwnData',ispController.handlefetchOwnData);
 
 ispRouter.get('/fetch',ispController.getIspData);//dorkar nai eta 

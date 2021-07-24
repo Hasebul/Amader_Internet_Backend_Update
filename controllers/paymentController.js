@@ -15,7 +15,7 @@ const handlePaymentInsertOne = async (req, res) => {
             updatePackageInfo(req.body);
             //updateIsWarnForPaymentStatus(req.body.isp_id, req.body.user_id,req.body.user_type);
             //assignEstablishmentTimeAndUpdateExpirationTime(req.body);
-            //sendNotificationOfPayment(req.body);
+            sendNotificationOfPayment(req.body);
             return res.status(201).send({
                 message: Data.message
             });
