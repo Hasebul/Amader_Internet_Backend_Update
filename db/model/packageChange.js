@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
+const ObjectID = require('mongodb');
 
 
 var PackageChangeSchema = new mongoose.Schema({
     
-    currentPackageName:{
-        type: String,
+    currentPackageId:{
+        type: {ObjectID},
         required:true
     },
-    changedPackageName:{
-        type:string,
+    changedPackageId:{
+        type:{ObjectID},
         required:true
     },
 
@@ -31,6 +32,6 @@ var PackageChangeSchema = new mongoose.Schema({
 
 })
 
-var PackageChange = mongoose.model('Package-Chagne', PackageChangeSchema);
+var PackageChange = mongoose.model('Package-Change', PackageChangeSchema);
 
 module.exports = {PackageChange}

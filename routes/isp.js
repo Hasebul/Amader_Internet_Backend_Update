@@ -15,6 +15,7 @@ ispRouter.post('/fetchOwnData',ispController.handlefetchOwnData);
 
 ispRouter.get('/fetch',ispController.getIspData);//dorkar nai eta 
 ispRouter.post('/buyPackage',ispController.handlebuyPackage);
+ispRouter.post('/addPackageToArray',ispController.handleAddPackageToArray);
 
 ispRouter.post('/login',authenticate.handleIspLogIn)
 ispRouter.post('/logout',authenticate.handleIspAuthentication,ispController.handleIspLogOut);

@@ -132,6 +132,55 @@ const handlebuyPackage = async (req, res) => {
 
 
 
+
+
+const handleAddPackageToArray = async (req, res) => {
+       
+    try{
+
+        let isp = await ispInterface.findIspByQuery({ _id: req.body.ispId});
+        let package = await packageInterface.findPackageByQuery({ _id: req.body.packageId});
+        isp=isp.data ;
+        package=package.data[0]; // all package find 
+        console.log(isp);
+        console.log(package);
+        //already package in the array 
+        // for( let t in isp.packages){
+        //     let  pkg = isp.packages[t];
+        //     if(pkg.packageId == req.body.packageId){
+        //         let termTime = pkg.terminationTime;
+        //         termTime = termTime.setMonth(termTime.getMonth()+package.duration);
+
+        //     }
+        // }
+        let termTime= new Date();
+        termTime.setMonth(termTime.getMonth()+package.duration);
+        console.log(termTime);
+        let t = isp.packages.push({packageId:req.body.packageId,terminationTime:termTime});
+        await isp.save();
+        return res.send({
+            message:"new package save to package array"
+        });
+
+    }catch(e){
+
+        return res.status(500).send({
+            message:"catch error(ispController) api/isp/addPackageToArray",
+            error:e.messege
+        })
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
 var handleIspLogOut= async (req,res) => {
     try {
          var isp = res.locals.middlewareResponse.isp;
@@ -270,5 +319,6 @@ module.exports = {
     handleIspLogOutAll,
     handlefetchOwnPackage,
     handlebuyPackage,
-    handlefetchOwnData
+    handlefetchOwnData,
+    handleAddPackageToArray
 }
