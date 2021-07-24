@@ -27,7 +27,7 @@ var UserSchema  = new mongoose.Schema({
     
     packages: [{
         packageId: {
-            type : String,
+            type : ObjectId,
             required : true
         },
         initiationTime : {
