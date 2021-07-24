@@ -104,18 +104,22 @@ const handlefetchOwnPackagesArray = async (req, res) => {
     try {
 
         let isp = await ispInterface.findIspByQuery({ _id: req.body.id }, "done");
-        isp=isp.data;
+        isp = isp.data;
         console.log(isp);
         let packages = [];
         for (let t in isp.packages) {
             let pkg = isp.packages[t];
             let Data = await packageInterface.findPackageByQuery({ _id: pkg.packageId }, true);
             let data = Data.data[0];
-            console.log(data);
-            packages.push(data);
-            
+            pkgDetails = {
+                data: data,
+                startTime: pkg.initiationTime,
+                expirationTime: pkg.terminationTime,
+            };
+            packages.push(pkgDetails);
+
         }
-        
+
         return res.send(packages);
 
     } catch (e) {
