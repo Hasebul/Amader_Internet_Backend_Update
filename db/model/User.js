@@ -24,6 +24,27 @@ var UserSchema  = new mongoose.Schema({
         type : String,
         default:null
     },
+    
+    packages: [{
+        packageId: {
+            type : String,
+            required : true
+        },
+        initiationTime : {
+            type : Date,
+            default:new Date()
+        },
+        terminationTime :{
+            type:Date,
+            default:null
+        }
+    }],
+
+
+
+
+
+
     nid : {
         type : String,
         minlength : 6,

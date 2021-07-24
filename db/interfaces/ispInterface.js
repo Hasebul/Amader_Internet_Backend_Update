@@ -208,6 +208,42 @@ const findByIdAndUpdate = async (id, update)=>{
 
 
 
+const UpdateOne = async (id, update)=>{
+
+    try {
+        let data = await ISP.updateOne(id, update);
+
+        if (data){
+            return {
+                data,
+                message: ' Update Successful',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: ' Update Failed',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+
+
+}
+
+
+
+
+
+
+
 
 
 
@@ -298,7 +334,8 @@ module.exports = {
     getPackages,
     findIspByQuery,
     findByIdAndUpdate,
-    findAllIspByQuery 
+    findAllIspByQuery,
+    UpdateOne 
     //deleteUser,
     //findUserByQuery,
     //findUserByIDAndUpdate

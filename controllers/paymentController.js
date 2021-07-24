@@ -2,6 +2,7 @@ const paymentInterface = require('../db/interfaces/paymentInterface');
 const ispInterface = require('../db/interfaces/ispInterface');
 const userInterface = require('../db/interfaces/userInterface');
 const notificationInterface = require('../db/interfaces/notificationInterface');
+const packageInterface = require('../db/interfaces/packageInterface');
 
 const handlePaymentInsertOne = async (req, res) => {
     try {
@@ -10,10 +11,11 @@ const handlePaymentInsertOne = async (req, res) => {
         let Data = await paymentInterface.insertData(req.body);//change here
 
         if (Data.status === 'OK') {
-
+            
+            updatePackageInfo(req.body);
             //updateIsWarnForPaymentStatus(req.body.isp_id, req.body.user_id,req.body.user_type);
-            assignEstablishmentTimeAndUpdateExpirationTime(req.body);
-            sendNotificationOfPayment(req.body);
+            //assignEstablishmentTimeAndUpdateExpirationTime(req.body);
+            //sendNotificationOfPayment(req.body);
             return res.status(201).send({
                 message: Data.message
             });
@@ -272,6 +274,98 @@ let assignEstablishmentTimeAndUpdateExpirationTime = async (payment) => { //eta 
 
     } catch (e) {
         console.log("catch error inside sendNotificationOfPayment");
+        console.log(e);
+    }
+
+}
+
+
+
+
+
+let updatePackageInfo = async (payment) => { //eta dorkar ache
+    //type 2 ->isp , 3 -> user  
+
+    // "package_id" :"60f08ce854c42a3f58302558",
+    // "isp_id" :"60e93678fbecd640544a2cec",
+    // "payment_status" :"true",
+    // "gateway" : "BKASH",
+    // "transaction_id" :"123abc",
+    // "amount":"103430",
+    // "method":"BAKSH",
+    // "paymentDuration":12
+
+    let type = payment.user_type;
+    try {
+        let package = await packageInterface.findPackageByQuery({ _id: payment.package_id});
+        package=package.data[0]; 
+        console.log(package);
+
+        if (type === 2) {
+            //fech isp from isp_id 
+            let isp = await ispInterface.findIspByQuery({ _id: payment.isp_id }, true);
+            isp = isp.data;
+            let flag = true;
+            // console.log(isp);
+            // console.log(isp.packages);
+            for (let t in isp.packages){
+                let pkg = isp.packages[t];
+                if(pkg.packageId === package._id.toString()){
+                    //console.log(pkg);
+                    let termTime = pkg.terminationTime;
+                    termTime.setMonth(termTime.getMonth()+package.duration);
+                    //console.log(termTime);
+                    await ispInterface.UpdateOne({_id:isp._id,"packages._id":pkg._id}, {
+                        $set: {
+                             "packages.$.terminationTime": termTime
+                        }
+                    });
+
+
+                    flag=false;
+                    break;
+                }
+            }
+
+            if(flag){
+                let termTime= new Date();
+                termTime.setMonth(termTime.getMonth()+package.duration);
+                isp.packages.push({packageId:package._id,terminationTime:termTime});
+                await isp.save();
+            }
+
+        }
+        else if (type === 3) {
+            //fech user from user_id 
+            let user = await userInterface.findUserByQuery({ _id: payment.user_id }, true);
+            user = user.data;
+            let flag = true;
+            for (let t in user.packages){
+                let pkg = user.packages[t];
+                if(pkg.packageId === package._id.toString()){
+                    //console.log(pkg);
+                    let termTime = pkg.terminationTime;
+                    termTime.setMonth(termTime.getMonth()+package.duration);
+                    //console.log(termTime);
+                    await userInterface.UpdateOne({_id:user._id,"packages._id":pkg._id}, {
+                        $set: {
+                                "packages.$.terminationTime": termTime
+                        }
+                    });
+                    flag=false;
+                    break;
+                }
+            }
+
+            if(flag){
+                let termTime= new Date();
+                termTime.setMonth(termTime.getMonth()+package.duration);
+                user.packages.push({packageId:package._id,terminationTime:termTime});
+                await user.save();
+            }    
+        }
+    } catch (e) {
+        console.log("catch error inside updateNOtifications");
         console.log(e);
     }
 

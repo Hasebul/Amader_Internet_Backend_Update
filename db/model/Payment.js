@@ -49,7 +49,7 @@ var PaymentSchema = new mongoose.Schema({
     },
     packageDuration:{ 
         type:Number,
-        required:true
+        default:null
     },
 });
 

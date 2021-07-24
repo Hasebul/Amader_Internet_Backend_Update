@@ -1,13 +1,13 @@
 const { ObjectID } = require('mongodb');
-const {User} = require('../model/User');
+const { User } = require('../model/User');
 
 const insertUser = async (userObject) => {
     try {
-       
+
         let Data = new User(userObject);
-        let data = await Data.save(); 
-        
-        if (data.nInserted === 0){
+        let data = await Data.save();
+
+        if (data.nInserted === 0) {
             return {
                 message: 'User Insertion Failed',
                 status: "ERROR"
@@ -28,11 +28,11 @@ const insertUser = async (userObject) => {
 
 
 
-const fetchUserData = async (req,res) => {
+const fetchUserData = async (req, res) => {
     try {
         let data = await User.find({});
 
-        if (data){
+        if (data) {
             return {
                 data,
                 message: 'User Found',
@@ -60,11 +60,11 @@ const fetchUserData = async (req,res) => {
 
 const findUserByQuery = async (query, option) => {
     try {
-      
+
 
         let data = await User.findOne(query);
-       
-        if (data){
+
+        if (data) {
             return {
                 data,
                 message: 'User Found',
@@ -91,11 +91,11 @@ const findUserByQuery = async (query, option) => {
 
 const findAllUserByQuery = async (query, option) => {
     try {
-      
+
 
         let data = await User.find(query);
-       
-        if (data){
+
+        if (data) {
             return {
                 data,
                 message: 'User Found',
@@ -123,12 +123,45 @@ const findAllUserByQuery = async (query, option) => {
 
 
 
-const findByIdAndUpdate = async (id, update)=>{
+const findByIdAndUpdate = async (id, update) => {
 
     try {
         let data = await User.findByIdAndUpdate(id, update);
 
-        if (data){
+        if (data) {
+            return {
+                data,
+                message: 'User Token Update Successful',
+                status: 'OK'
+            }
+        } else {
+            return {
+                data: null,
+                message: 'User Token Update Failed',
+                status: 'ERROR'
+            };
+        }
+
+    } catch (e) {
+        return {
+            data: null,
+            message: e.message,
+            status: 'ERROR'
+        };
+    }
+
+
+}
+
+
+
+
+const UpdateOne = async (id, update) => {
+
+    try {
+        let data = await User.updateOne(id, update);
+
+        if (data) {
             return {
                 data,
                 message: 'User Token Update Successful',
@@ -160,11 +193,13 @@ const findByIdAndUpdate = async (id, update)=>{
 
 
 
+
 module.exports = {
     insertUser,
     fetchUserData,
     findUserByQuery,
     findByIdAndUpdate,
     findAllUserByQuery,
-   
+    UpdateOne
+
 }
