@@ -13,6 +13,11 @@ var PaymentSchema = new mongoose.Schema({
         required : true
     },
 
+    packageName:{
+        type: String,
+        required:true
+    },
+
     isp_id : {
         type : {ObjectID},
         default : null
@@ -21,6 +26,11 @@ var PaymentSchema = new mongoose.Schema({
     user_id : {
         type : {ObjectID},
         default : null
+    },
+
+    senderName:{
+        type:String,
+        required:true
     },
   
     payment_time : {

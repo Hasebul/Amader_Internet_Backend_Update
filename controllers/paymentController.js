@@ -6,7 +6,33 @@ const packageInterface = require('../db/interfaces/packageInterface');
 
 const handlePaymentInsertOne = async (req, res) => {
     try {
+        
+        //fetch package by id 
+        let pkg = await packageInterface.findPackageByQuery({_id:req.body.package_id});
+        pkg = pkg.data[0];
+        
         let payment = req.body;
+
+        if(req.body.user_type==2){
+            let isp =await ispInterface.findIspByQuery({ _id:req.body.isp_id },true);
+            isp = isp.data ;
+            payment= {
+                user_type :req.body.user_type,
+                package_id :req.body.package_id,
+                gateway : req.body.gateway,
+                transaction_id :req.body.transaction_id,
+                amount:req.body.amount,
+                method:req.body.method,
+                packageDuration:req.body.packageDuration, 
+                isp_id:req.body.isp_id,
+                senderName:isp.name,
+                packageName:pkg.name
+            } 
+
+
+
+        }
+
         if(req.body.user_type==3){
             let user = await userInterface.findUserByQuery({ _id: payment.user_id }, true);
             user = user.data;
@@ -19,9 +45,12 @@ const handlePaymentInsertOne = async (req, res) => {
                 amount:req.body.amount,
                 method:req.body.method,
                 packageDuration:req.body.packageDuration, 
-                isp_id:user.ispObjectId
+                isp_id:user.ispObjectId,
+                senderName:user.name,
+                packageName:pkg.name
             }
         }
+        console.log(payment);
         let Data = await paymentInterface.insertData(payment);//change here
         if (Data.status === 'OK') {
             updatePackageInfo(payment);
@@ -46,9 +75,43 @@ const handlePaymentInsertOne = async (req, res) => {
 
 const handleFetchAllIspPayment = async (req, res) => {
  
-    type = 2 ; 
+    let type = 2 ; // for isp 
     try{
-        let Data = await paymentInterface.findAllPaymentByQuery({user_type:type});
+        let Data = await paymentInterface.findAllPaymentByQuery({user_type:type,isp_id:{$ne:null},package_id:{$ne:null}});
+        let data = Data.data;
+       
+        // for(let t in data){
+        //     let pam = data[t];
+        //     let isp = await ispInterface.findIspByQuery({ _id:pam.isp_id},true);
+        //     isp = isp.data ;
+        //     let pkg = await packageInterface.findPackageByQuery({_id:pam.package_id});
+        //     pkg = pkg.data[0];
+        //     // console.log(t);
+        //     // console.log(isp);
+        //     // console.log(pkg);
+        //    // data[t].ispName = isp.name ;
+        //    // data[t].packageName = pkg.name;
+
+        // }
+
+
+        res.status(200).send(data); //payment array
+
+    }catch(e){
+        res.status(500).send({
+           message:"Catch erroe(paymentController api/payment/fetchAllIspPayment",
+           error: e.message
+        })
+    }
+
+}
+
+const handleFetchIspOwnPayment = async (req, res) => { // fetch data of payment of isp
+ 
+    let type = 2 ; // for isp 
+    let id  = req.body.id;
+    try{
+        let Data = await paymentInterface.findAllPaymentByQuery({user_type:type,isp_id:id});
         let data = Data.data;
         res.status(200).send(data); //payment array
 
@@ -59,6 +122,47 @@ const handleFetchAllIspPayment = async (req, res) => {
     }
 
 }
+
+
+
+const handleFetchUserOwnPayment = async (req, res) => { // fetch data of payment of user
+ 
+    let type = 3; // for user
+    let id  = req.body.id;
+    try{
+        let Data = await paymentInterface.findAllPaymentByQuery({user_type:type,user_id:id});
+        let data = Data.data;
+        res.status(200).send(data); //payment array
+
+    }catch(e){
+        res.status(500).send({
+           message:"Catch erroe(paymentController api/payment/fetchAllIspPayment"
+        })
+    }
+
+}
+
+
+
+const handleFetchAllUserOfIspPayment = async (req, res) => { // fetch data of payment of users of a particular isp
+ 
+    let type = 3; // for user
+    let id  = req.body.id;//isp id
+    try{
+        let Data = await paymentInterface.findAllPaymentByQuery({user_type:type,isp_id:id});
+        let data = Data.data;
+        res.status(200).send(data); //payment array
+
+    }catch(e){
+        res.status(500).send({
+           message:"Catch erroe(paymentController api/payment/fetchAllIspPayment"
+        })
+    }
+
+}
+
+
+
 
 
 //-------------------helper function ----------------------
@@ -213,6 +317,9 @@ let updatePackageInfo = async (payment) => {
 
 module.exports = {
     handlePaymentInsertOne,
-    handleFetchAllIspPayment
+    handleFetchAllIspPayment,
+    handleFetchIspOwnPayment,
+    handleFetchUserOwnPayment,
+    handleFetchAllUserOfIspPayment
     
 }
