@@ -8,12 +8,6 @@ const paymentInterface = require('../db/interfaces/paymentInterface');
 const handleNotificationInsertOne = async (req, res) => {
     try {
 
-        // console.log("inside  handleNotificationInsertOne");
-
-
-        // write code for make notification data 
-
-
         let Data = await notificationInterface.insertData(req.body);//change here
 
         if (Data.status === 'OK') {
