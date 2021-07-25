@@ -44,6 +44,22 @@ const handlePaymentInsertOne = async (req, res) => {
 }
 
 
+const handleFetchAllIspPayment = async (req, res) => {
+ 
+    type = 2 ; 
+    try{
+        let Data = await paymentInterface.findAllPaymentByQuery({user_type:type});
+        let data = Data.data;
+        res.status(200).send(data); //payment array
+
+    }catch(e){
+        res.status(500).send({
+           message:"Catch erroe(paymentController api/payment/fetchAllIspPayment"
+        })
+    }
+
+}
+
 
 //-------------------helper function ----------------------
 
@@ -197,5 +213,6 @@ let updatePackageInfo = async (payment) => {
 
 module.exports = {
     handlePaymentInsertOne,
+    handleFetchAllIspPayment
     
 }
