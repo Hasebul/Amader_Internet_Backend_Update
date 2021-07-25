@@ -8,10 +8,6 @@ const paymentController = require('../controllers/paymentController');
 
 
 paymentRouter.post('/insert',paymentController.handlePaymentInsertOne );//ispController.handleIspInsertOne
-//paymentRouter.post('/informationFetch',paymentController.handleInformationFetch);
-
-
-paymentRouter.get('/fetch', paymentController.handlefetchPaymentData);//ispController.handleRequest ) ;// dorkar nai eta
 
 
 module.exports = paymentRouter ;

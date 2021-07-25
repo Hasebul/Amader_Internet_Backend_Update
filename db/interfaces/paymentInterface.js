@@ -2,12 +2,8 @@ const {Payment}= require('../model/Payment');
 
 const insertData = async (Object) => {
     try {
-        //console.log(Object);
         let Data = new Payment(Object);//problem
-        //console.log(Data);
         let data = await Data.save(); 
-        //console.log(data);
-        
         if (data.nInserted === 0){
             return {
                 message: 'User Insertion Failed',
@@ -26,37 +22,6 @@ const insertData = async (Object) => {
         };
     }
 };
-
-
-
-const fetchData = async (req,res) => {
-    try {
-        let data = await Payment.find({});
-
-        if (data){
-            
-            return {
-                data,
-                message: 'User Found',
-                status: 'OK'
-            }
-        } else {
-            return {
-                data: null,
-                message: 'User Not Found',
-                status: 'ERROR'
-            };
-        }
-
-    } catch (e) {
-        return {
-            data: null,
-            message: e.message,
-            status: 'ERROR'
-        };
-    }
-};
-
 
 
 const findAllPaymentByQuery = async (query) => {
@@ -126,7 +91,6 @@ const findByIdAndUpdate = async (id, update)=>{
 
 module.exports = {
     insertData,
-    fetchData,
     findAllPaymentByQuery,
     findByIdAndUpdate
 }

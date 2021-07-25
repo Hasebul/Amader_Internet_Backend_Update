@@ -26,77 +26,6 @@ const handleIspInsertOne = async (req, res) => {
 }
 
 
-const handlefetchIspPackages = async (req, res) => {
-    try {
-
-        //console.log("inside  handlefetchIspPackages");
-        let ispPackages = await ispInterface.getPackages(req.body);//change here
-
-        if (ispPackages.status === 'OK') {
-            return res.status(201).send({
-                message: ispPackages.message
-            });
-        } else {
-            return res.status(400).send({
-                message: 'Could not Insert User',
-                error: ispPackages.message
-            });
-        }
-    } catch (e) {
-        return res.status(500).send({
-            message: 'ERROR in POST /api/Isp/insert',
-            error: e.message
-        });
-    }
-}
-
-const handleUpdateConnectionStatus = async (req, res) => {
-    try {
-        var isp = res.locals.middlewareResponse.isp;
-        var updateData = await ispInterface.UpdateConnectionStatus(isp);
-        if (updateData.status === 'ok') {
-            res.send(updateData);
-        }
-        else {
-            res.send({ message: " Error(ispController) api/isp/updateconnectionstatus . Could Not Update ISP Connection Status" });
-        }
-
-    } catch (e) {
-        return res.status(500).send({
-            message: 'Catch Error(ispController) api/isp/updateconnectionstatus . Could Not Update ISP Connection Status',
-            error: e.message
-        });
-    }
-}
-
-
-
-const handlefetchOwnPackage = async (req, res) => {
-
-    try {
-        let Data = await packageInterface.findPackageByQuery({ _id: req.body.package_id }, true);
-        if (Data.status === 'OK') {//find isp 
-            let pkg = Data.data;
-            return res.send(pkg);
-
-        }
-        else {
-            return res.status(400).send({
-                message: "Could not find package",
-                error: Data.message
-            })
-        }
-
-    } catch (e) {
-        return res.status(500).send({
-            message: 'ERROR in POST /api/isp/fetchOwnPackage',
-            error: e.message
-        });
-    }
-
-}
-
-
 
 const handlefetchOwnPackagesArray = async (req, res) => {
 
@@ -105,7 +34,6 @@ const handlefetchOwnPackagesArray = async (req, res) => {
 
         let isp = await ispInterface.findIspByQuery({ _id: req.body.id }, "done");
         isp = isp.data;
-        console.log(isp);
         let packages = [];
         for (let t in isp.packages) {
             let pkg = isp.packages[t];
@@ -130,48 +58,6 @@ const handlefetchOwnPackagesArray = async (req, res) => {
     }
 
 }
-
-
-
-
-
-
-
-
-const handlebuyPackage = async (req, res) => {
-
-    try {
-
-        let Data = await ispInterface.findByIdAndUpdate({ _id: req.body.id }, {
-            $set: {
-                package_id: req.body.package_id
-            }
-        })
-
-        if (Data.status === 'OK') {
-            return res.send({
-                message: "package_id " + Data.message
-            })
-        }
-        else {
-            return res.status(400).send({
-                message: Data.message
-            })
-        }
-
-    } catch (e) {
-
-        return res.status(500).send({
-            message: "catch error(ispController) api/isp/buyPackage",
-            error: e.messege
-        })
-
-    }
-
-
-}
-
-
 
 
 
@@ -214,11 +100,6 @@ const handleAddPackageToArray = async (req, res) => {
 
 
 }
-
-
-
-
-
 
 
 
@@ -295,71 +176,10 @@ const handlefetchOwnData = async (req, res) => {
 
 
 
-
-
-const handleIspRegister = async (req, res) => {
-    try {
-
-        //console.log(req.body);
-        let ispData = await ispInterface.insertIsp(req.body);//change here
-
-        if (ispData.status === 'OK') {
-            return res.status(201).send({
-                message: ispData.message
-            });
-        } else {
-            return res.status(400).send({
-                message: 'Could not Insert User',
-                error: ispData.message
-            });
-        }
-    } catch (e) {
-        return res.status(500).send({
-            message: 'ERROR in POST /api/Isp/insert',
-            error: e.message
-        });
-    }
-}
-
-const getIspData = async (req, res) => {
-    try {
-
-        //console.log(req.body);
-        let ispData = await ispInterface.fetchIspData(req, res);//change here
-
-        if (ispData.status === 'OK') {
-            res.send(ispData);
-            return res.status(201).send({
-                message: ispData.message
-            });
-        } else {
-            return res.status(400).send({
-                message: 'Could not Insert User',
-                error: ispData.message
-            });
-        }
-    } catch (e) {
-        return res.status(500).send({
-            message: 'ERROR in POST /api/Isp/insert',
-            error: e.message
-        });
-    }
-}
-
-
-
-
-
 module.exports = {
-    handleIspRegister,
-    getIspData,
     handleIspInsertOne,
-    handlefetchIspPackages,
-    handleUpdateConnectionStatus,
     handleIspLogOut,
     handleIspLogOutAll,
-    handlefetchOwnPackage,
-    handlebuyPackage,
     handlefetchOwnData,
     handleAddPackageToArray,
     handlefetchOwnPackagesArray

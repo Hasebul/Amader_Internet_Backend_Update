@@ -34,34 +34,6 @@ const insertOffer = async (userObject) => {
 
 
 
-const fetchOfferData = async (req,res) => {
-    try {
-        let data = await Offer.find({});
-
-        if (data){
-            return {
-                data,
-                message: 'Offer Found',
-                status: 'OK'
-            }
-        } else {
-            return {
-                data: null,
-                message: 'Offer Not Found',
-                status: 'ERROR'
-            };
-        }
-
-    } catch (e) {
-        return {
-            data: null,
-            message: e.message,
-            status: 'ERROR'
-        };
-    }
-};
-
-
 
 const findOfferByQuery = async (query, option) => {
     try {
@@ -194,10 +166,8 @@ const findAllOfferByQuery = async (query, option) => {
 
 module.exports = {
     insertOffer,
-    fetchOfferData,
     findOfferByQuery,
     findByIdAndUpdate,
     findAllOfferByQuery,
     findByQueryAndUpdateAllMatch
-    
 }

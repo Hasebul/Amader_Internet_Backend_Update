@@ -20,11 +20,7 @@ var UserSchema  = new mongoose.Schema({
         required : true,
         trim : true
     },
-    package_id : {
-        type : String,
-        default:null
-    },
-    
+
     packages: [{
         packageId: {
             type : ObjectId,
@@ -40,11 +36,6 @@ var UserSchema  = new mongoose.Schema({
         }
     }],
 
-
-
-
-
-
     nid : {
         type : String,
         minlength : 6,
@@ -55,29 +46,15 @@ var UserSchema  = new mongoose.Schema({
     ispId:{ // id menas isp name here ok 
         type:String,
         required:true,
-        trim:true,
-        minLength:1
+    },
+    ispObjectId:{ 
+        type:ObjectId,
+        required:true
     },
 
-    establishmentTime: {
-        type: Date,
-        default: null
-    },
-    connection_status : {
-        type : Boolean,
-        default : false
-    },
-    
     balance:{
         type:Number,
         default:0
-    },
-
-   
-   
-    expirationTime:{
-        type:Date,
-        default:null
     },
 
     union:{

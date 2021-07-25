@@ -3,8 +3,8 @@ const packageInterface = require('../db/interfaces/packageInterface');
 
 const handleUserInsertOne = async (req, res) => {
     try {
-        
-       
+
+
         let Data = await userInterface.insertUser(req.body);
 
         if (Data.status === 'OK') {
@@ -27,19 +27,19 @@ const handleUserInsertOne = async (req, res) => {
 
 
 
-var handleUserLogOut= async (req,res) => {
+var handleUserLogOut = async (req, res) => {
     try {
-         var user = res.locals.middlewareResponse.user;
-         var token = res.locals.middlewareResponse.token;
+        var user = res.locals.middlewareResponse.user;
+        var token = res.locals.middlewareResponse.token;
 
         await userInterface.findByIdAndUpdate(user._id, {
             $pull: {
-                tokens: {token}
+                tokens: { token }
             }
         });
 
         return res.status(200).send("Sucessfully Logout");
-        
+
 
     } catch (e) {
         return res.status(500).send({
@@ -51,14 +51,15 @@ var handleUserLogOut= async (req,res) => {
 }
 
 
-var handleUserLogOutAll= async (req,res) => {
+
+var handleUserLogOutAll = async (req, res) => {
     try {
-         var user = res.locals.middlewareResponse.user;
-         var token = res.locals.middlewareResponse.token;
-        user.tokens=[];
+        var user = res.locals.middlewareResponse.user;
+        var token = res.locals.middlewareResponse.token;
+        user.tokens = [];
         user.save();
         return res.status(200).send("Sucessfully Logging out from all devices");
-        
+
 
     } catch (e) {
         return res.status(500).send({
@@ -71,138 +72,72 @@ var handleUserLogOutAll= async (req,res) => {
 
 
 
+const handlefetchOwnPackagesArray = async (req, res) => {
 
-const getUserData =  async (req, res) => {
+
     try {
-        
-        //console.log(req.body);
-        let Data = await userInterface.fetchUserData(req,res);//change here
-        
-        if (Data.status === 'OK') {
-            res.send(Data);
-            return res.status(201).send({
-                message: Data.message
-            });
-        } else {
-            return res.status(400).send({
-                message: 'Could not find User',
-                error: Data.message
-            });
+
+        let user = await userInterface.findUserByQuery({ _id: req.body.id }, "done");
+        user = user.data;
+        let packages = [];
+        for (let t in user.packages) {
+            let pkg = user.packages[t];
+            let Data = await packageInterface.findPackageByQuery({ _id: pkg.packageId }, true);
+            let data = Data.data[0];
+            pkgDetails = {
+                data: data,
+                startTime: pkg.initiationTime,
+                expirationTime: pkg.terminationTime,
+            };
+            packages.push(pkgDetails);
+
         }
+
+        return res.send(packages);
+
     } catch (e) {
         return res.status(500).send({
-            message: 'ERROR in POST /api/user/fetch',
+            message: 'ERROR in POST /api/isp/fetchOwnPackagesArray',
             error: e.message
         });
     }
+
 }
 
 
 
-const handlefetchOwnPackage =async (req, res) => {
+const handlefetchOwnData = async (req, res) => {
 
-    try{
-        let Data=await packageInterface.findPackageByQuery({_id:req.body.package_id},true);
-        if(Data.status === 'OK'){
-               let pkg=Data.data;
-               return res.send(pkg);
-    
+    try {
+        let Data = await userInterface.findUserByQuery({ _id: req.body.id }, true);
+        //console.log(Data);
+        if (Data.status === 'OK') {//find isp 
+            let user = Data.data;
+            return res.send(user);
+
         }
-        else{
+        else {
             return res.status(400).send({
-                message:"Could not find package",
-                error:Data.message
+                message: "Could not find package",
+                error: Data.message
             })
         }
-        
-     } catch (e) {
+
+    } catch (e) {
         return res.status(500).send({
-            message: 'ERROR in POST /api/isp/fetchOwnPackage',
+            message: 'ERROR in POST /api/isp/fetchOwnData',
             error: e.message
         });
-       }
-    
     }
 
 
-
-
-
-const handlebuyPackage = async (req, res) => {
-       
-        try{
-    
-            let Data = await userInterface.findByIdAndUpdate({_id:req.body.id},{
-                $set:{
-                    package_id:req.body.package_id
-                }
-            })
-    
-            if(Data.status === 'OK'){
-                return res.send({
-                    message: "package_id "+Data.message
-                })
-            }
-            else{
-                return res.status(400).send({
-                    message:Data.message
-                })
-            }
-    
-        }catch(e){
-    
-            return res.status(500).send({
-                message:"catch error(userController) api/user/buyPackage",
-                error:e.messege
-            })
-    
-        }
-    
-    
-    }
-
-
-
-
-
-
-const handlefetchOwnData = async(req,res) => {
-     
-        try{
-            let Data=await userInterface.findUserByQuery({_id:req.body.id},true);
-            //console.log(Data);
-            if(Data.status === 'OK'){//find isp 
-                   let user=Data.data;
-                   return res.send(user);
-        
-            }
-            else{
-                return res.status(400).send({
-                    message:"Could not find package",
-                    error:Data.message
-                })
-            }
-            
-         } catch (e) {
-            return res.status(500).send({
-                message: 'ERROR in POST /api/isp/fetchOwnData',
-                error: e.message
-            });
-           }
-        
-        
-        }
-        
-
+}
 
 
 module.exports = {
     handleUserInsertOne,
     handleUserLogOut,
     handleUserLogOutAll,
-    getUserData,
-    handlefetchOwnPackage,
-    handlebuyPackage,
-    handlefetchOwnData
-
+    handlefetchOwnData,
+    handlefetchOwnPackagesArray
 }

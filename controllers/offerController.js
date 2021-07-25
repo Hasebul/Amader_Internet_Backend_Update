@@ -29,33 +29,6 @@ const handleOfferInsertOne = async (req, res) => {
 }
 
 
-
-const getOfferData =  async (req, res) => {
-    try {
-        
-        //console.log(req.body);
-        let Data = await offerInterface.fetchOfferData(req,res);//change here
-        
-        if (Data.status === 'OK') {
-           // res.send(Data);
-          //  console.log(Data);
-            return res.status(201).send({
-                 Data
-            });
-        } else {
-            return res.status(400).send({
-                message: 'Could not find offer',
-                error: Data.message
-            });
-        }
-    } catch (e) {
-        return res.status(500).send({
-            message: 'ERROR in POST /api/offer/fetch',
-            error: e.message
-        });
-    }
-}
-
  const handleFetchById = async (req, res) => {
    
     
@@ -126,28 +99,21 @@ try{
 
 
 
-
-
 //helper function 
 
 
 var updateOfferStatusByExpirationDate= async() => {
      try{
-
-        //find all packages 
         let today = new Date();
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
         var Data = await offerInterface.findAllOfferByQuery({expirationTime:{$lt: today}},{username:1});
-        //console.log(Data);
         var offers = Data.data;
-       // console.log(offers)
         for( var i in offers){
             var off  = offers[i];
             await offerInterface.findByIdAndUpdate({_id:off._id},{ 
                 $set:{
                     status:false,
-                }})
-            //find package whose offer id is this false offer id     
+                }})     
             var pkgData = await packageInterface.findPackageByQuery({offerId:off._id.toString()},{username: 1});
             var pkgs = pkgData.data;
             for(var k in pkgs){
@@ -158,31 +124,15 @@ var updateOfferStatusByExpirationDate= async() => {
                     }
                 })
             }
-
-
         }
-        // var update = await offerInterface.findByQueryAndUpdateAllMatch({expirationTime:{$lt: new Date()}},{ 
-        //     $set:{
-        //         status:"false"
-        //     }
-        // });
-
-
-
 
      }catch(e){
          console.log("catch porblem inside updateOfferStatusByExpirationDate() ");
      }
-
-
 }
 
 
-
-
-
 module.exports = {
-    getOfferData,
     handleOfferInsertOne ,
     handleFetchById,
     handleOfferFetchByQuery,

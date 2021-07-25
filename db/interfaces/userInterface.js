@@ -28,36 +28,6 @@ const insertUser = async (userObject) => {
 
 
 
-const fetchUserData = async (req, res) => {
-    try {
-        let data = await User.find({});
-
-        if (data) {
-            return {
-                data,
-                message: 'User Found',
-                status: 'OK'
-            }
-        } else {
-            return {
-                data: null,
-                message: 'User Not Found',
-                status: 'ERROR'
-            };
-        }
-
-    } catch (e) {
-        return {
-            data: null,
-            message: e.message,
-            status: 'ERROR'
-        };
-    }
-};
-
-
-
-
 const findUserByQuery = async (query, option) => {
     try {
 
@@ -121,8 +91,6 @@ const findAllUserByQuery = async (query, option) => {
 
 
 
-
-
 const findByIdAndUpdate = async (id, update) => {
 
     try {
@@ -152,7 +120,6 @@ const findByIdAndUpdate = async (id, update) => {
 
 
 }
-
 
 
 
@@ -188,15 +155,8 @@ const UpdateOne = async (id, update) => {
 
 
 
-
-
-
-
-
-
 module.exports = {
     insertUser,
-    fetchUserData,
     findUserByQuery,
     findByIdAndUpdate,
     findAllUserByQuery,

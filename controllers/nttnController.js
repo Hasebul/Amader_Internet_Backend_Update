@@ -28,10 +28,6 @@ const handleNttnInsertOne = async (req, res) => {
 }
 
 
-
-
-
-
 var handleNttnLogOut= async (req,res) => {
     try {
          var nttn = res.locals.middlewareResponse.nttn;
@@ -73,12 +69,6 @@ var handleNttnLogOutAll= async (req,res) => {
     }
 
 }
-
-
-
-
-
-
 
 
 

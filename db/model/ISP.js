@@ -39,35 +39,17 @@ var ISPSchema = new mongoose.Schema({
         }
     }],
 
-
- 
-
     license_id : {
         type : String,
         minlength : 6,
         required : true,
         trim : true
     },
-    establishmentTime: {
-        type: Date,
-        default: null
-    },
-    connection_status : {
-        type : Boolean,
-        default : false
-    },
+    
     remaining_bandwidth : {
         type : Number,
         default : 0,
     },
-
-   
-    
-    expirationTime:{
-        type:Date,
-        default:null
-    },
-
 
     balance:{
         type:Number,

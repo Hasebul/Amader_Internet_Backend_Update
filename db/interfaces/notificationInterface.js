@@ -2,13 +2,8 @@ const {Notification}= require('../model/Notification');
 
 const insertData = async (Object) => {
     try {
-       // console.log("inside nif");
-       // console.log(Object);
         let Data = new Notification(Object);//problem
-      //  console.log(Data);
         let data = await Data.save(); 
-       // console.log(data);
-        
         if (data.nInserted === 0){
             return {
                 message: 'Notifications Insertion Failed',
@@ -27,38 +22,6 @@ const insertData = async (Object) => {
         };
     }
 };
-
-
-
-const fetchData = async (req,res) => {
-    try {
-        let data = await Notification.find({});
-
-        if (data){
-            
-            return {
-                data,
-                message: 'User Found',
-                status: 'OK'
-            }
-        } else {
-            return {
-                data: null,
-                message: 'User Not Found',
-                status: 'ERROR'
-            };
-        }
-
-    } catch (e) {
-        return {
-            data: null,
-            message: e.message,
-            status: 'ERROR'
-        };
-    }
-};
-
-
 
 
 const findNotificationByQuery = async (query) => {
@@ -162,7 +125,6 @@ const findByQueryAndDeleteAllMatched = async (query)=>{
 
 module.exports = {
     insertData,
-    fetchData,
     findNotificationByQuery,
     findByIdAndUpdate,
     findByQueryAndDeleteAllMatched

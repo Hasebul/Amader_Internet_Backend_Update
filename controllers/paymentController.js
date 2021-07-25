@@ -6,16 +6,26 @@ const packageInterface = require('../db/interfaces/packageInterface');
 
 const handlePaymentInsertOne = async (req, res) => {
     try {
-
-        //console.log("inside  handlePaymentInsertOne");
-        let Data = await paymentInterface.insertData(req.body);//change here
-
+        let payment = req.body;
+        if(req.body.user_type==3){
+            let user = await userInterface.findUserByQuery({ _id: payment.user_id }, true);
+            user = user.data;
+            payment= {
+                user_type :req.body.user_type,
+                package_id :req.body.package_id,
+                user_id :req.body.user_id,
+                gateway : req.body.gateway,
+                transaction_id :req.body.transaction_id,
+                amount:req.body.amount,
+                method:req.body.method,
+                packageDuration:req.body.packageDuration, 
+                isp_id:user.ispObjectId
+            }
+        }
+        let Data = await paymentInterface.insertData(payment);//change here
         if (Data.status === 'OK') {
-            
-            updatePackageInfo(req.body);
-            //updateIsWarnForPaymentStatus(req.body.isp_id, req.body.user_id,req.body.user_type);
-            //assignEstablishmentTimeAndUpdateExpirationTime(req.body);
-            sendNotificationOfPayment(req.body);
+            updatePackageInfo(payment);
+            sendNotificationOfPayment(payment);
             return res.status(201).send({
                 message: Data.message
             });
@@ -27,109 +37,15 @@ const handlePaymentInsertOne = async (req, res) => {
         }
     } catch (e) {
         return res.status(500).send({
-            message: 'ERROR in POST /api/Isp/insert',
+            message: 'ERROR in POST /api/Payment/insert',
             error: e.message
         });
     }
 }
 
 
-const handlefetchPaymentData = async (req, res) => {
-    try {
-
-        //console.log("inside  handlefetchIspPackages");
-        let Data = await paymentInterface.fetchData(req.body);//change here
-        console.log(Data);
-        if (Data.status === 'OK') {
-
-            delete Data.status;
-            delete Data.message;
-            //console.log(pendingdata);
-            return res.send(Data);
-
-        } else {
-            return res.status(400).send({
-                message: 'Could not Insert User',
-                error: Data.message
-            });
-        }
-    } catch (e) {
-        return res.status(500).send({
-            message: 'ERROR in POST /api/pending/fetching',
-            error: e.message
-        });
-    }
-}
-
-
-
-
-// const handleInformationFetch = async (req,res) => {
-
-
-
-//     try {
-
-//         //console.log("inside  handlefetchIspPackages");
-//         let type = req.body.type;
-//         let id = req.body.id;
-
-//         if(type === 2){ // find isp 
-
-//             let Data = await paymentInterface.findAllPaymentByQuery({isp_id:id});
-//             let isp = Data.data[0];
-
-
-//         }
-
-//         else if(type == 3){ // find user 
-
-//         }
-//     } catch (e) {
-//         return res.status(500).send({
-//             message: 'ERROR in POST /api/pending/fetching',
-//             error: e.message
-//         });
-//     }
-
-
-
-
-
-
-// }
 
 //-------------------helper function ----------------------
-
-// var updateIsWarnForPaymentStatus = async( isp_id,user_id,type ) => {  //dorkar nai eta likhe felbo
-//     //type 2 ->isp , 3 -> user  
-
-//     try{
-//     if(type === 2 ){
-
-//         await ispInterface.findByIdAndUpdate({_id: isp_id},{
-//             $set:{
-//                 isWarnForPayment:false
-//             }
-//         })
-
-//     }
-//     else if(type===3){
-//         await userInterface.findByIdAndUpdate({_id: user_id},{
-//             $set:{
-//                 isWarnForPayment:false
-//             }
-//         })
-
-//     }
-
-//      } catch(e){
-//          console.log("catch error inside updateIsWarnForPaymentStatus");
-//          console.log(e);
-//      }
-
-// }
-
 
 
 
@@ -198,103 +114,7 @@ let sendNotificationOfPayment = async (payment) => { //eta dorkar ache
 
 
 
-
-
-
-let assignEstablishmentTimeAndUpdateExpirationTime = async (payment) => { //eta dorkar ache
-    //type 2 ->isp , 3 -> user  
-
-    // "package_id" :"60f08ce854c42a3f58302558",
-    // "isp_id" :"60e93678fbecd640544a2cec",
-    // "payment_status" :"true",
-    // "gateway" : "BKASH",
-    // "transaction_id" :"123abc",
-    // "amount":"103430",
-    // "method":"BAKSH",
-    // "paymentDuration":12
-
-    let type = payment.user_type;
-    try {
-        if (type === 2) {
-            //fech isp from isp_id 
-            let isp = await ispInterface.findIspByQuery({ _id: payment.isp_id }, true);
-            isp = isp.data;
-            let expTime = isp.expirationTime;
-            if (!isp.establishmentTime) {
-                expTime=new Date();
-                // expTime.setMonth(expTime.getMonth()+payment.packageDuration);
-
-                await ispInterface.findByIdAndUpdate({ _id: isp._id }, {
-                    $set: {
-                        establishmentTime: new Date(),
-                        expirationTime: new Date(),
-                        connection_status:true,
-                        package_id:payment.package_id
-                    }
-                })
-            }
-            
-            // isp = await ispInterface.findIspByQuery({ _id: payment.isp_id }, true);
-            // isp = isp.data;
-
-            
-            expTime.setMonth(expTime.getMonth() + payment.packageDuration);
-
-            await ispInterface.findByIdAndUpdate({ _id: isp._id }, {
-                $set: {
-                    expirationTime: expTime,
-                }
-            })
-        }
-        else if (type === 3) {
-            //fech user from user_id 
-            let user = await userInterface.findUserByQuery({ _id: payment.user_id }, true);
-            user = user.data;
-            let expTime = user.expirationTime;
-            if (!user.establishmentTime) {
-                expTime=new Date();
-                // expTime.setMonth(expTime.getMonth()+payment.packageDuration);
-                await userInterface.findByIdAndUpdate({ _id: user._id }, {
-                    $set: {
-                        establishmentTime: new Date(),
-                        expirationTime: new Date(),
-                        connection_status:true,
-                        package_id:payment.package_id
-                    }
-                })
-            }
-
-            expTime.setMonth(expTime.getMonth() + payment.packageDuration);
-            await userInterface.findByIdAndUpdate({ _id: user._id }, {
-                $set: {
-                    expirationTime: expTime
-                }
-            })
-        }
-
-    } catch (e) {
-        console.log("catch error inside sendNotificationOfPayment");
-        console.log(e);
-    }
-
-}
-
-
-
-
-
-let updatePackageInfo = async (payment) => { //eta dorkar ache
-    //type 2 ->isp , 3 -> user  
-
-    // "package_id" :"60f08ce854c42a3f58302558",
-    // "isp_id" :"60e93678fbecd640544a2cec",
-    // "payment_status" :"true",
-    // "gateway" : "BKASH",
-    // "transaction_id" :"123abc",
-    // "amount":"103430",
-    // "method":"BAKSH",
-    // "paymentDuration":12
-
+let updatePackageInfo = async (payment) => { 
     let type = payment.user_type;
     try {
         let package = await packageInterface.findPackageByQuery({ _id: payment.package_id});
@@ -310,7 +130,7 @@ let updatePackageInfo = async (payment) => { //eta dorkar ache
             // console.log(isp.packages);
             for (let t in isp.packages){
                 let pkg = isp.packages[t];
-                if(pkg.packageId === package._id.toString()){
+                if(pkg.packageId.toString() === package._id.toString()){
                     //console.log(pkg);
                     let termTime = pkg.terminationTime;
                     termTime.setMonth(termTime.getMonth()+package.duration);
@@ -342,7 +162,7 @@ let updatePackageInfo = async (payment) => { //eta dorkar ache
             let flag = true;
             for (let t in user.packages){
                 let pkg = user.packages[t];
-                if(pkg.packageId === package._id.toString()){
+                if(pkg.packageId.toString() === package._id.toString()){
                     //console.log(pkg);
                     let termTime = pkg.terminationTime;
                     termTime.setMonth(termTime.getMonth()+package.duration);
@@ -377,6 +197,5 @@ let updatePackageInfo = async (payment) => { //eta dorkar ache
 
 module.exports = {
     handlePaymentInsertOne,
-    handlefetchPaymentData,
-
+    
 }

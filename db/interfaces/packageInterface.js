@@ -29,36 +29,6 @@ const insertPackage = async (packageObject) => {
 
 
 
-const fetchPackageData = async (req,res) => {
-    try {
-        let data = await Package.find({});
-
-        if (data){
-            
-            return {
-                data,
-                message: 'User Found',
-                status: 'OK'
-            }
-        } else {
-            return {
-                data: null,
-                message: 'User Not Found',
-                status: 'ERROR'
-            };
-        }
-
-    } catch (e) {
-        return {
-            data: null,
-            message: e.message,
-            status: 'ERROR'
-        };
-    }
-};
-
-
-
 const findPackageByQuery = async (query, option) => {
     try {
       
@@ -86,7 +56,6 @@ const findPackageByQuery = async (query, option) => {
         };
     }
 };
-
 
 
 const findByIdAndUpdate = async (id, update)=>{
@@ -120,10 +89,8 @@ const findByIdAndUpdate = async (id, update)=>{
 }
 
 
-
 module.exports = {
     insertPackage,
-    fetchPackageData,
     findPackageByQuery,
     findByIdAndUpdate
 }
