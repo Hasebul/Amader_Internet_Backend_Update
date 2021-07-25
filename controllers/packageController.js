@@ -207,16 +207,22 @@ const handleAddOffer = async (req, res) => {
 
 
 
-const handleFetchUnionPackage = async (req, res) => {
+const handleFetchUnionUserPackage = async (req, res) => {
 
     try{
-
-    }catch{
-        
+           let Data = await packageInterface.findPackageByQuery({package_type:1,union:req.body.union},true);
+           console.log(Data);
+           let data = Data.data;
+           if(Data.status==='OK'){
+               res.send(data);
+           }
+           else res.status(404).send({message:"not found"});
+    }catch(e){
+         res.status(500).send({
+             message:"catch error in packageController",
+             error:e.message
+            });
     }
-
-
-
 
 }
 
@@ -312,5 +318,5 @@ module.exports = {
     handleUpdatePackageOngoingStatus,
     handleAddOffer,
     handlefetchByQueryWithStatus,
-    handleFetchUnionPackage
+    handleFetchUnionUserPackage
 }
