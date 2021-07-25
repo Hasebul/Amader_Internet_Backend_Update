@@ -134,10 +134,39 @@ const handlefetchOwnData = async (req, res) => {
 }
 
 
+
+const handleFetchUserOfIspByQuery =async (req, res) => {
+
+    try {
+        let Data = await userInterface.findAllUserByQuery({ ispObjectId: req.body.id }, true);
+        //console.log(Data);
+        if (Data.status === 'OK') {//find isp 
+            let user = Data.data;
+            return res.send(user);
+
+        }
+        else {
+            return res.status(400).send({
+                message: "Could not find package",
+                error: Data.message
+            })
+        }
+
+    } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/isp/fetchOwnData',
+            error: e.message
+        });
+    }
+
+
+}
+
 module.exports = {
     handleUserInsertOne,
     handleUserLogOut,
     handleUserLogOutAll,
     handlefetchOwnData,
-    handlefetchOwnPackagesArray
+    handlefetchOwnPackagesArray,
+    handleFetchUserOfIspByQuery
 }
