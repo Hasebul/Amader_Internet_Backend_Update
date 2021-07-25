@@ -3,6 +3,8 @@ const ispInterface = require('../db/interfaces/ispInterface');
 const userInterface = require('../db/interfaces/userInterface');
 const notificationInterface = require('../db/interfaces/notificationInterface');
 const packageInterface = require('../db/interfaces/packageInterface');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const handlePaymentInsertOne = async (req, res) => {
     try {
@@ -128,7 +130,7 @@ const handleFetchIspOwnPayment = async (req, res) => { // fetch data of payment 
 const handleFetchUserOwnPayment = async (req, res) => { // fetch data of payment of user
  
     let type = 3; // for user
-    let id  = req.body.id;
+    let id  = req.body.id;//user_id
     try{
         let Data = await paymentInterface.findAllPaymentByQuery({user_type:type,user_id:id});
         let data = Data.data;
@@ -147,8 +149,10 @@ const handleFetchUserOwnPayment = async (req, res) => { // fetch data of payment
 const handleFetchAllUserOfIspPayment = async (req, res) => { // fetch data of payment of users of a particular isp
  
     let type = 3; // for user
-    let id  = req.body.id;//isp id
+    let id  = new ObjectId(req.body.id);//isp id --> use this if a isp_id insert from user then it's object id 
     try{
+        console.log(id);
+        console.log(type);
         let Data = await paymentInterface.findAllPaymentByQuery({user_type:type,isp_id:id});
         let data = Data.data;
         res.status(200).send(data); //payment array
