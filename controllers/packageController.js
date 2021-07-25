@@ -207,6 +207,23 @@ const handleAddOffer = async (req, res) => {
 
 
 
+const handleFetchUnionPackage = async (req, res) => {
+
+    try{
+
+    }catch{
+        
+    }
+
+
+
+
+}
+
+
+
+
+
 //------------------------internal function for uses----------------------------------------------------------------
 
 ///-------sendUpdatePackageStatusTouser----------
@@ -294,5 +311,6 @@ module.exports = {
     handleUpdatePackage,
     handleUpdatePackageOngoingStatus,
     handleAddOffer,
-    handlefetchByQueryWithStatus
+    handlefetchByQueryWithStatus,
+    handleFetchUnionPackage
 }

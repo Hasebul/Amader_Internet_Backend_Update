@@ -63,7 +63,11 @@ var PackageSchema = new mongoose.Schema({
     areas:{
         type:Array,
         required:true
-    }
+    },
+    union:{
+        type:String,
+        required:true
+    },
 })
 
 var Package = mongoose.model('Package', PackageSchema);

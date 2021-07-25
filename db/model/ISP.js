@@ -19,10 +19,10 @@ var ISPSchema = new mongoose.Schema({
         required : true,
         trim : true
     },
-    package_id : {
-        type : String,
-        default:null
-    },
+    // package_id : {
+    //     type : String,
+    //     default:null
+    // },
     
     packages: [{
         packageId: {
