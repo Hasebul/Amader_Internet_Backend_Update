@@ -176,11 +176,40 @@ const handlefetchOwnData = async (req, res) => {
 
 
 
+
+const handlefetchIspOfNttnByQuery = async (req, res) => {
+
+    try {
+        let Data = await ispInterface.findAllIspByQuery({}, true); //this find all the isp
+        //console.log(Data);
+        if (Data.status === 'OK') {//find isp 
+            let isp = Data.data;
+            return res.send(isp);
+
+        }
+        else {
+            return res.status(400).send({
+                message: "Could not find package",
+                error: Data.message
+            })
+        }
+
+    } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/isp/fetchOwnData',
+            error: e.message
+        });
+    }
+
+
+}
+
 module.exports = {
     handleIspInsertOne,
     handleIspLogOut,
     handleIspLogOutAll,
     handlefetchOwnData,
     handleAddPackageToArray,
-    handlefetchOwnPackagesArray
+    handlefetchOwnPackagesArray,
+    handlefetchIspOfNttnByQuery
 }
