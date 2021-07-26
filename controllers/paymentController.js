@@ -303,8 +303,8 @@ let updatePackageInfo = async (payment) => {
 
             if(flag){
                 let termTime= new Date();
-                termTime.setMonth(termTime.getMonth()+package.duration);
-                user.packages.push({packageId:package._id,terminationTime:termTime});
+                termTime.setMonth(termTime.getMonth()+package.duration)
+                user.packages=[{packageId:package._id,terminationTime:termTime}]; // if wrong
                 await user.save();
             }    
         }
