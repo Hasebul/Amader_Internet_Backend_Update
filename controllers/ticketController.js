@@ -79,6 +79,36 @@ const handlefetchByQuery = async (req, res) => {
 
 }
 
+
+
+
+const handlefetchBySender= async (req, res) => {
+    try {
+        let sId = req.body.senderId;
+        let sType = req.body.senderType;
+        let tickts = await ticketInterface.findByQuery({ senderId: sId, senderType: sType });//can generate error
+        //let Packages = Data.data;
+        if (tickts.status === 'OK') {
+            //res.send(Packages);
+            delete tickts.status;
+            delete tickts.message;
+            return res.status(200).send(tickts);
+
+        } else {
+            return res.status(400).send({
+                message: 'Could not find Notifications',
+                error: tickts.message
+            });
+        }
+    } catch (e) {
+        return res.status(500).send({
+            message: 'ERROR in POST /api/notification/fetchbyquery',
+            error: e.message
+        });
+    }
+
+}
+
 const handleUpdateSeenStatus = async (req, res) => {
     try {
         var id = ObjectId(req.body.id); // convert into object id 
@@ -140,6 +170,9 @@ module.exports = {
     handleInsertOne,
     handleUnseenCount,
     handlefetchByQuery,
+    handlefetchBySender,
     handleUpdateSeenStatus,
-    handleUpdateResolveStatus
+    handleUpdateResolveStatus,
+
+
 }
