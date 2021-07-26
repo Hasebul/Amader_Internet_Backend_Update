@@ -79,7 +79,7 @@ const pendingRouter = require('./routes/pending');
 const notificationRouter = require('./routes/notification');
 const paymentRouter = require('./routes/payment');
 const offerRouter = require('./routes/offer');
-
+const ticketRouter = require('./routes/ticket');
 // send json to express application
 
 var app = express();
@@ -107,6 +107,7 @@ app.use("/api/pending", pendingRouter);
 app.use("/api/notification",notificationRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/offer",offerRouter);
+app.use("/api/ticket",ticketRouter);
 
 //dummy function
 

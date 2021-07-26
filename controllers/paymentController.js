@@ -203,7 +203,8 @@ let sendNotificationOfPayment = async (payment) => { //eta dorkar ache
                 senderType: 2,
                 receiverType: 1,
                 subject: "Receive " + payment.amount + "TK from " + isp.name,
-                details: "You have receive " + payment.amount + "TK from " + isp.name + ".TransictionId:" + payment.transaction_id + " gateway:" + payment.gateway + "."
+                details: "You have receive " + payment.amount + "TK from " + isp.name + ".TransictionId:" + payment.transaction_id + " gateway:" + payment.gateway + ".",
+                notificationArrivalTime:new Date()
             };
 
             await notificationInterface.insertData(nttnNotif);
@@ -223,7 +224,8 @@ let sendNotificationOfPayment = async (payment) => { //eta dorkar ache
                 senderType: 3,
                 receiverType: 2,
                 subject: "Receive " + payment.amount + "TK from " + user.name,
-                details: "You have receive " + payment.amount + "TK from " + user.name + ".TransictionId:" + payment.transaction_id + " gateway:" + payment.gateway + "."
+                details: "You have receive " + payment.amount + "TK from " + user.name + ".TransictionId:" + payment.transaction_id + " gateway:" + payment.gateway + ".",
+                notificationArrivalTime:new Date()
             };
 
             await notificationInterface.insertData(ispNotif);
