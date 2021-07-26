@@ -29,7 +29,7 @@ const handlePaymentInsertOne = async (req, res) => {
                 isp_id:req.body.isp_id,
                 senderName:isp.name,
                 packageName:pkg.name,
-                //payment_time:new Date()
+                payment_time:new Date()
             } 
 
 
@@ -51,7 +51,7 @@ const handlePaymentInsertOne = async (req, res) => {
                 isp_id:user.ispObjectId,
                 senderName:user.name,
                 packageName:pkg.name,
-                //payment_time:new Date()
+                payment_time:new Date()
             }
         }
         //console.log(payment);
