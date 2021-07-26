@@ -1,4 +1,5 @@
 const ticketInterface = require('../db/interfaces/ticketInterface');
+const notificationInterface = require('../db/interfaces/notificationInterface');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const userInterface = require('../db/interfaces/userInterface');
@@ -103,23 +104,35 @@ const handleUpdateSeenStatus = async (req, res) => {
 
 const handleUpdateResolveStatus = async (req, res) => {
     try {
-        var id = ObjectId(req.body.id); // convert into object id 
+        let id = ObjectId(req.body.id); // convert into object id 
         await ticketInterface.findByIdAndUpdate(id, {
             $set: {
                 resolveStatus: true,
+                seenStatus:true
             }
         });
+        //---fetch ticketData
+        let Data =await ticketInterface.findByQuery({_id:id});
+        let tikD = Data.data[0]; // array 
 
+        // --- send notification to sender about resolve status-----
+        let notif = {
+            senderId: tikD.receiverId,
+            receiverID: tikD.senderId,
+            senderType: tikD.receiverType,
+            receiverType: tikD.senderType,
+            subject: tikD.category +" resolved .",
+            details: "You Problem has been resolved. If you face any of this problem please let us know again. Your comfort our concern . Thank You! ",
+            notificationArrivalTime:new Date()
+        };
+        await notificationInterface.insertData(notif);
         return res.status(200).send("Sucessfully Update  resolveStatus");
-
-
     } catch (e) {
         return res.status(500).send({
             message: "Catch ERROR(ticketController) api/ticket/updateresolveStatus ",
             error: e.message
         });
     }
-
 }
 
 
