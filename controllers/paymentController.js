@@ -276,7 +276,7 @@ let updatePackageInfo = async (payment) => {
             if(flag){
                 let termTime= new Date();
                 termTime.setMonth(termTime.getMonth()+package.duration);
-                isp.packages.push({packageId:package._id,terminationTime:termTime});
+                isp.packages.push({packageId:package._id,terminationTime:termTime,initiationTime:new Date()});
                 await isp.save();
             }
 
@@ -306,7 +306,7 @@ let updatePackageInfo = async (payment) => {
             if(flag){
                 let termTime= new Date();
                 termTime.setMonth(termTime.getMonth()+package.duration)
-                user.packages=[{packageId:package._id,terminationTime:termTime}]; // if wrong
+                user.packages=[{packageId:package._id,terminationTime:termTime,initiationTime:new Date()}];
                 await user.save();
             }    
         }

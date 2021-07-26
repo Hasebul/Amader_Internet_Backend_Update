@@ -28,7 +28,7 @@ var UserSchema  = new mongoose.Schema({
         },
         initiationTime : {
             type : Date,
-            default:new Date()
+            required:true
         },
         terminationTime :{
             type:Date,

@@ -35,7 +35,7 @@ var PaymentSchema = new mongoose.Schema({
   
     payment_time : {
         type : Date,
-        default:new Date()
+        required:true
     },
 
     gateway : {
