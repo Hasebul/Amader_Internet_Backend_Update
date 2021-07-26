@@ -38,11 +38,17 @@ const handleUnseenCount = async (req, res) => {
         let rType = req.body.receiverType;
         let Data = await ticketInterface.findByQuery({ receiverId: rId, receiverType: rType, seenStatus: false });
         let tickts = Data.data;
-        const unseenNot = tickts.length;
+        const unseenTicketCount = tickts.length;
+        let notifs = await notificationInterface.findNotificationByQuery({ receiverID: rId, receiverType: rType, seenStatus: false });
+        notifs = notifs.data;
+        const unseenNotifCount = notifs.length;
 
-        return res.status(200).send({ unseenCount: unseenNot });
+        return res.status(200).send({
+            unseenTicket: unseenTicketCount,
+            unseenNotification:unseenNotifCount
+         });
 
-    } catch (e) {
+    }catch (e) {
         return res.status(500).send({
             message: 'ERROR in POST /api/tickets/unseenCount ',
             error: e.message
