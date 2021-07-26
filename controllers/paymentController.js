@@ -28,7 +28,8 @@ const handlePaymentInsertOne = async (req, res) => {
                 packageDuration:req.body.packageDuration, 
                 isp_id:req.body.isp_id,
                 senderName:isp.name,
-                packageName:pkg.name
+                packageName:pkg.name,
+                payment_time:new Date()
             } 
 
 
@@ -49,10 +50,11 @@ const handlePaymentInsertOne = async (req, res) => {
                 packageDuration:req.body.packageDuration, 
                 isp_id:user.ispObjectId,
                 senderName:user.name,
-                packageName:pkg.name
+                packageName:pkg.name,
+                payment_time:new Date()
             }
         }
-        console.log(payment);
+        //console.log(payment);
         let Data = await paymentInterface.insertData(payment);//change here
         if (Data.status === 'OK') {
             updatePackageInfo(payment);
