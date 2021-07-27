@@ -15,6 +15,6 @@ ispRouter.post('/addPackageToArray',ispController.handleAddPackageToArray);//not
 ispRouter.post('/login',authenticate.handleIspLogIn)
 ispRouter.post('/logout',authenticate.handleIspAuthentication,ispController.handleIspLogOut);
 ispRouter.post('/logoutAll',authenticate.handleIspAuthentication,ispController.handleIspLogOutAll)
-
+ispRouter.get('/ispInRegion',ispController.handleRegionIspNumber);
 
 module.exports = ispRouter;

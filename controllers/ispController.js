@@ -204,6 +204,54 @@ const handlefetchIspOfNttnByQuery = async (req, res) => {
 
 }
 
+
+
+const handleRegionIspNumber =async (req, res) => {
+
+    try{
+       let data = [] ;
+       let Data = await ispInterface.findAllIspByQuery({region:"Dhaka"},true);
+       let num = Data.data.length;
+       data.push({region:"DHAKA",val:num});
+
+       
+       Data = await ispInterface.findAllIspByQuery({region:"Rajshahi"},true);
+       num = Data.data.length;
+       data.push({region:"RAJSHAHI",val:num});
+
+       Data = await ispInterface.findAllIspByQuery({region:"Chittagong"},true);
+       num = Data.data.length;
+       data.push({region:"CHITTAGONG",val:num});
+
+       Data = await ispInterface.findAllIspByQuery({region:"Mymensingh"},true);
+       num = Data.data.length;
+       data.push({region:"MYMENSINGH",val:num});
+
+       Data = await ispInterface.findAllIspByQuery({region:"Khulna"},true);
+       num = Data.data.length;
+       data.push({region:"KHULNA",val:num});
+
+       Data = await ispInterface.findAllIspByQuery({region:"Barishal"},true);
+       num = Data.data.length;
+       data.push({region:"BARISHAL",val:num});
+
+       Data = await ispInterface.findAllIspByQuery({region:"Sylhet"},true);
+       num = Data.data.length;
+       data.push({region:"SYLHET",val:num});
+
+       Data = await ispInterface.findAllIspByQuery({region:"Rangpur"},true);
+       num = Data.data.length;
+       data.push({region:"RANGPUR",val:num});
+
+       res.send(data);
+        
+    }catch(e){
+        res.status(500).send({error:e.message});
+    }
+
+
+}
+
 module.exports = {
     handleIspInsertOne,
     handleIspLogOut,
@@ -211,5 +259,6 @@ module.exports = {
     handlefetchOwnData,
     handleAddPackageToArray,
     handlefetchOwnPackagesArray,
-    handlefetchIspOfNttnByQuery
+    handlefetchIspOfNttnByQuery,
+    handleRegionIspNumber
 }
