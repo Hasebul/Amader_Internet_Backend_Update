@@ -99,6 +99,33 @@ try{
 
 
 
+ 
+const handleFetchUnionOffer = async (req, res) => {
+
+    try{
+           let Data = await offerInterface.findAllOfferByQuery({union:req.body.union},true);
+           //console.log(Data);
+           let data = Data.data;
+           if(Data.status==='OK'){
+               res.send(data);
+           }
+           else res.status(404).send({message:"not found"});
+    }catch(e){
+         res.status(500).send({
+             message:"catch error in packageController",
+             error:e.message
+            });
+    }
+
+}
+
+
+
+
+
+
+
+
 //helper function 
 
 
@@ -136,4 +163,5 @@ module.exports = {
     handleOfferInsertOne ,
     handleFetchById,
     handleOfferFetchByQuery,
+    handleFetchUnionOffer
 }

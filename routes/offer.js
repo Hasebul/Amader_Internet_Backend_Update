@@ -13,5 +13,7 @@ offerRouter.post('/fetchById',offerController.handleFetchById);
 
 offerRouter.post('/fetchByQuery',offerController.handleOfferFetchByQuery);
 
+offerRouter.post('/fetchUnionOffer',offerController.handleFetchUnionOffer);
+
 
 module.exports = offerRouter;

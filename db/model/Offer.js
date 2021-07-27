@@ -28,6 +28,10 @@ var OfferSchema  = new mongoose.Schema({
     creator:{
         type:String,
         required:true
+    },
+    union:{
+        type:String,
+        default:null
     }
 
 })

@@ -66,7 +66,7 @@ var PackageSchema = new mongoose.Schema({
     },
     union:{
         type:String,
-        required:true
+        default:null
     },
 })
 
