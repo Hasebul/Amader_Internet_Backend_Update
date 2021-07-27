@@ -12,5 +12,6 @@ ticketRouter.post('/fetchByQuery',ticketController.handlefetchByQuery);
 ticketRouter.post('/fetchBySender',ticketController.handlefetchBySender);
 ticketRouter.post('/updateSeenStatus',ticketController.handleUpdateSeenStatus);
 ticketRouter.post('/updateResolveStatus',ticketController.handleUpdateResolveStatus);
+ticketRouter.post('/refund',ticketController.handleRefund);
 
 module.exports = ticketRouter ;

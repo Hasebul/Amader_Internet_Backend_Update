@@ -45,10 +45,10 @@ const handleUnseenCount = async (req, res) => {
 
         return res.status(200).send({
             unseenTicket: unseenTicketCount,
-            unseenNotification:unseenNotifCount
-         });
+            unseenNotification: unseenNotifCount
+        });
 
-    }catch (e) {
+    } catch (e) {
         return res.status(500).send({
             message: 'ERROR in POST /api/tickets/unseenCount ',
             error: e.message
@@ -85,10 +85,7 @@ const handlefetchByQuery = async (req, res) => {
 
 }
 
-
-
-
-const handlefetchBySender= async (req, res) => {
+const handlefetchBySender = async (req, res) => {
     try {
         let sId = req.body.senderId;
         let sType = req.body.senderType;
@@ -144,11 +141,11 @@ const handleUpdateResolveStatus = async (req, res) => {
         await ticketInterface.findByIdAndUpdate(id, {
             $set: {
                 resolveStatus: true,
-                seenStatus:true
+                seenStatus: true
             }
         });
         //---fetch ticketData
-        let Data =await ticketInterface.findByQuery({_id:id});
+        let Data = await ticketInterface.findByQuery({ _id: id });
         let tikD = Data.data[0]; // array 
 
         // --- send notification to sender about resolve status-----
@@ -157,9 +154,9 @@ const handleUpdateResolveStatus = async (req, res) => {
             receiverID: tikD.senderId,
             senderType: tikD.receiverType,
             receiverType: tikD.senderType,
-            subject: tikD.category +" resolved .",
+            subject: tikD.category + " resolved .",
             details: "You Problem has been resolved. If you face any of this problem please let us know again. Your comfort our concern . Thank You! ",
-            notificationArrivalTime:new Date()
+            notificationArrivalTime: new Date()
         };
         await notificationInterface.insertData(notif);
         return res.status(200).send("Sucessfully Update  resolveStatus");
@@ -172,6 +169,75 @@ const handleUpdateResolveStatus = async (req, res) => {
 }
 
 
+
+const handleRefund = async (req, res) => {
+
+    try {
+
+        let type = req.body.type; // who's amount refunded isp / user
+        let usrName = req.body.name;
+        let resolver = req.body.resolver;
+        let amount = req.body.amount;
+        let message = req.body.message;
+        let category = req.body.category; // apatoto dor kar nai 
+
+        if (type === 2) { //Refund isp amount
+
+            let isp = await ispInterface.findIspByQuery({ name: usrName }, true);
+            isp = isp.data;
+            let incAmount = isp.balance + amount;
+            await ispInterface.findByIdAndUpdate(isp._id, {
+                $set: {
+                    balance: incAmount
+                }
+            })
+            let notif = {
+                senderId: resolver,
+                receiverID: usrName,
+                senderType: 1,
+                receiverType: 2,
+                subject: "Your amount is credited by " + amount + " TK",
+                details: message + " For this your amount is credited .Your comfort our concern . Thank You! ",
+                notificationArrivalTime: new Date()
+            };
+            await notificationInterface.insertData(notif);
+
+        }
+        else if (type === 3) { // Refund user amount
+
+            let user = await userInterface.findUserByQuery({ name: usrName }, true);
+            user = user.data;
+            let incAmount = user.balance+ amount;
+            await userInterface.findByIdAndUpdate(user._id, {
+                $set: {
+                    balance: incAmount
+                }
+            })
+            let notif = {
+                senderId: resolver,
+                receiverID: usrName,
+                senderType: 2,
+                receiverType: 3,
+                subject: "Your amount is credited by " + amount + " TK",
+                details: message + " For this your amount is credited .Your comfort our concern . Thank You! ",
+                notificationArrivalTime: new Date()
+            };
+            await notificationInterface.insertData(notif);
+
+        }
+
+        res.send("Sucessfully refund");
+
+    }catch (e) {
+        res.status(500).send({
+            message: "Catch ERROR(ticketController) api/ticket/refund",
+            error: e.message
+        });
+    }
+
+
+}
+
 module.exports = {
     handleInsertOne,
     handleUnseenCount,
@@ -179,6 +245,5 @@ module.exports = {
     handlefetchBySender,
     handleUpdateSeenStatus,
     handleUpdateResolveStatus,
-
-
+    handleRefund
 }
