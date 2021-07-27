@@ -177,10 +177,10 @@ const handleRefund = async (req, res) => {
         let type = req.body.type; // who's amount refunded isp / user
         let usrName = req.body.name;
         let resolver = req.body.resolver;
-        let amount = req.body.amount;
+        let amount = parseInt(req.body.amount);
         let message = req.body.message;
         let category = req.body.category; // apatoto dor kar nai 
-
+        
         if (type === 2) { //Refund isp amount
 
             let isp = await ispInterface.findIspByQuery({ name: usrName }, true);
