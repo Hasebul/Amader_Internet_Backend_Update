@@ -14,5 +14,6 @@ packageRouter.post('/fetchUnionUserPackage',packageController.handleFetchUnionUs
 packageRouter.post('/update',packageController.handleUpdatePackage);
 packageRouter.post('/updateStatus',packageController.handleUpdatePackageOngoingStatus);
 packageRouter.post('/addOffer',packageController.handleAddOffer);
+packageRouter.get('/packageInRegion',packageController.handleFetchPackageCountRegion);
 
 module.exports = packageRouter;

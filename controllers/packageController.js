@@ -228,6 +228,55 @@ const handleFetchUnionUserPackage = async (req, res) => {
 
 
 
+const handleFetchPackageCountRegion = async(req,res)=> {
+
+    try{
+        let num =0 ;
+        let data = [] ;
+        let Data = await packageInterface.findPackageByQuery({areas:"Nation-wide",packageCreator:"Nttn"},true);
+        num = Data.data.length;
+        data.push({region:"NATION-WIDE",val:num});
+ 
+        Data = await packageInterface.findPackageByQuery({areas:"Dhaka",packageCreator:"Nttn"},true);
+        num = Data.data.length;
+        data.push({region:"DHAKA",val:num});
+        
+        Data = await packageInterface.findPackageByQuery({areas:"Rajshahi",packageCreator:"Nttn"},true);
+        num = Data.data.length;
+        data.push({region:"RAJSHAHI",val:num});
+ 
+        Data = await packageInterface.findPackageByQuery({areas:"Chittagong",packageCreator:"Nttn"},true);
+        num = Data.data.length;
+        data.push({region:"CHITTAGONG",val:num});
+ 
+        Data = await packageInterface.findPackageByQuery({areas:"Mymensingh",packageCreator:"Nttn"},true);
+        num = Data.data.length;
+        data.push({region:"MYMENSINGH",val:num});
+ 
+        Data = await packageInterface.findPackageByQuery({areas:"Khulna",packageCreator:"Nttn"},true);
+        num = Data.data.length;
+        data.push({region:"KHULNA",val:num});
+ 
+        Data = await packageInterface.findPackageByQuery({areas:"Barishal",packageCreator:"Nttn"},true);
+        num = Data.data.length;
+        data.push({region:"BARISHAL",val:num});
+ 
+        Data = await packageInterface.findPackageByQuery({areas:"Sylhet",packageCreator:"Nttn"},true);
+        num = Data.data.length;
+        data.push({region:"SYLHET",val:num});
+ 
+        Data = await packageInterface.findPackageByQuery({areas:"Rangpur",packageCreator:"Nttn"},true);
+        num = Data.data.length;
+        data.push({region:"RANGPUR",val:num});
+ 
+        res.send(data);
+         
+     }catch(e){
+         res.status(500).send({error:e.message});
+     }
+}
+
+
 
 
 //------------------------internal function for uses----------------------------------------------------------------
@@ -318,5 +367,6 @@ module.exports = {
     handleUpdatePackageOngoingStatus,
     handleAddOffer,
     handlefetchByQueryWithStatus,
-    handleFetchUnionUserPackage
+    handleFetchUnionUserPackage,
+    handleFetchPackageCountRegion
 }
