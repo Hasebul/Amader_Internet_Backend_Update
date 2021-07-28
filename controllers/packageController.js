@@ -307,13 +307,13 @@ var sendUpdatePackageStatusToUser = async (package, status) => {
     if (package.packageCreator === "Nttn") { // nttn send notification to isp
         notif.senderType = 1;
         notif.receiverType = 2;
-        let dummyData = await ispInterface.findAllIspByQuery({ package_id: package._id.toString() }, { username: 1, userType: 1 });//can generate error
+        let dummyData = await ispInterface.findAllIspByQuery({ "packages._id":package._id }, true);//can generate error
         packageUser = dummyData.data;
     }
     else {
         notif.senderType = 2;
         notif.receiverType = 3;
-        let dummyData = await userInterface.findAllUserByQuery({ package_id: package._id.toString() }, { username: 1, userType: 1 });//can generate error
+        let dummyData = await userInterface.findAllUserByQuery({ "packages._id":package._id }, { username: 1, userType: 1 });//can generate error
         packageUser = dummyData.data;
     }
     for (var i in packageUser) {
