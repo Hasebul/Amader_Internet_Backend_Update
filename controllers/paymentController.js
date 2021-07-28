@@ -265,11 +265,14 @@ let updatePackageInfo = async (payment) => {
                     //console.log(termTime);
                     await ispInterface.UpdateOne({_id:isp._id,"packages._id":pkg._id}, {
                         $set: {
-                             "packages.$.terminationTime": termTime
+                             "packages.$.terminationTime": termTime,
                         }
                     });
-
-
+                    await ispInterface.findByIdAndUpdate(isp._id,{
+                        $set: {
+                            balance:0
+                        }
+                    });
                     flag=false;
                     break;
                 }
@@ -297,7 +300,13 @@ let updatePackageInfo = async (payment) => {
                     //console.log(termTime);
                     await userInterface.UpdateOne({_id:user._id,"packages._id":pkg._id}, {
                         $set: {
-                                "packages.$.terminationTime": termTime
+                                "packages.$.terminationTime": termTime,
+                                 balance:0
+                        }
+                    });
+                    await userInterface.findByIdAndUpdate(user._id,{
+                        $set: {
+                            balance:0
                         }
                     });
                     flag=false;
